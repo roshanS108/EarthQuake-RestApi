@@ -40,7 +40,7 @@ import org.springframework.stereotype.Service;
 
  */
 @Service
-public class EarthQuakeClient {
+public class EarthQuakeClient implements EarthquakeDataProcessor,EarthQuakeDataExporter{
 
     @Value("classpath:/data/nov20quakedatasmall.atom")
     private Resource atomFileResource;
@@ -48,7 +48,7 @@ public class EarthQuakeClient {
 
     public EarthQuakeClient() {
     }
-
+    @Override
     public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
                                                    double magMin) {
         if(quakeData == null){
@@ -65,31 +65,7 @@ public class EarthQuakeClient {
         logger.info("Filtered earthquakes by magnitude greater than {}. Number of quakes: {}", magMin, filteredList.size());
         return filteredList;
     }
-
-    /**
-     * Filters and returns a list of earthquake entries (QuakeEntry) that are within a specified maximum distance
-     * from a given location. This method is useful for identifying earthquakes that occurred near a specific
-     * geographical point, such as a city or a landmark.
-     *
-     * @param quakeData An ArrayList of QuakeEntry objects, each representing an earthquake with its own location.
-     @param distMax   The maximum distance (in kilometers) within which to find earthquakes from the specified location.
-     It defines the radius of interest, indicating, "I'm only interested in earthquakes that are
-     within this many kilometers from my specified location."
-
-      * @param from      The reference Location object from which the distance to each earthquake is calculated.
-     * @return An ArrayList of QuakeEntry objects, each representing an earthquake that occurred within the specified
-     * maximum distance from the given location. The list is empty if no earthquakes meet the criteria.
-     */
-    public ArrayList<QuakeEntry> filterByDistanceFrom(ArrayList<QuakeEntry> quakeData,
-                                                      double distMax,
-                                                      Location from) {
-        return quakeData.stream()
-                // Calculate the distance from 'from' to 'quakeEntry.getLocation()'
-                .filter(quakeEntry -> from.distanceTo(quakeEntry.getLocation()) < distMax)
-                .collect(Collectors.toCollection(ArrayList::new));
-
-    }
-
+    @Override
     public void dumpCSV(ArrayList<QuakeEntry> list) {
         System.out.println("Latitude,Longitude,Magnitude,Info");
         for (QuakeEntry qe : list) {
@@ -99,13 +75,11 @@ public class EarthQuakeClient {
                     qe.getMagnitude(),
                     qe.getInfo());
         }
-
-
     }
+    @Override
     public void bigQuakes() {
         ArrayList<QuakeEntry> largeQuakes = new ArrayList<>();
         ArrayList<QuakeEntry> list = new ArrayList<>();
-
         try {
             EarthQuakeParser parser = new EarthQuakeParser();
 //            String source = "data/nov20quakedatasmall.atom";
@@ -126,21 +100,5 @@ public class EarthQuakeClient {
             logger.info("Read data for {} quakes", list.size());
         }
     }
-
-
-
-    public void createCSV() {
-        EarthQuakeParser parser = new EarthQuakeParser();
-        String source = "data/nov20quakedatasmall.atom";
-        //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
-        ArrayList<QuakeEntry> list = parser.read(source);
-        dumpCSV(list);
-        System.out.println("# quakes read: " + list.size());
-        for (QuakeEntry qe : list) {
-            System.out.println(qe);
-        }
-    }
-
-
 
 }
