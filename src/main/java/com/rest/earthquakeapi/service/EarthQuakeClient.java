@@ -3,6 +3,8 @@ package com.rest.earthquakeapi.service;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import com.rest.earthquakeapi.apache.Location;
@@ -42,10 +44,9 @@ public class EarthQuakeClient {
 
     @Value("classpath:/data/nov20quakedatasmall.atom")
     private Resource atomFileResource;
-
+    private static final Logger logger = LoggerFactory.getLogger(EarthQuakeClient.class);
 
     public EarthQuakeClient() {
-        // TODO Auto-generated constructor stub
     }
 
     public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
@@ -168,21 +169,30 @@ public class EarthQuakeClient {
 
 
     public void bigQuakes() {
-        EarthQuakeParser parser = new EarthQuakeParser();
-        //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
-        String source = "data/nov20quakedatasmall.atom";
-        ArrayList<QuakeEntry> list = parser.read(String.valueOf(atomFileResource));
-        ArrayList<QuakeEntry> largeQuakes = filterByMagnitude(list, 5.0);
+        ArrayList<QuakeEntry> largeQuakes = new ArrayList<>();
+        ArrayList<QuakeEntry> list = new ArrayList<>();
 
-        //print each quake from the filtered list
-        largeQuakes.forEach(System.out::println);
-        //counting and printing the number of earthquakes larger than 5.0
-        long count = largeQuakes.stream()
-                .count();
-        System.out.println("Number of earthquakes with magnitude greater than 5.0: " + count);
+        try {
+            EarthQuakeParser parser = new EarthQuakeParser();
+//            String source = "data/nov20quakedatasmall.atom";
+//            logger.info("Reading earthquake data from {}", source);
 
-        System.out.println("read data for " + list.size() + " quakes");
+            list = parser.read(String.valueOf(atomFileResource));
+            logger.debug("Total earthquakes read: {}", list.size());
+
+            largeQuakes = filterByMagnitude(list, 5.0);
+            logger.info("Number of earthquakes with magnitude 5.0 and above: {}", largeQuakes.size());
+
+            // Print each quake from the filtered list
+            largeQuakes.forEach(quake -> logger.info(quake.toString()));
+
+        } catch (Exception e) {
+            logger.error("Error processing earthquake data: ", e);
+        } finally {
+            logger.info("Read data for {} quakes", list.size());
+        }
     }
+
 
     /**
      * Filters earthquakes based on their depth within a specified range.
