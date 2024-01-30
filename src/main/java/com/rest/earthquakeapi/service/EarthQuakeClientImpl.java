@@ -31,13 +31,13 @@ import org.springframework.stereotype.Service;
 
  */
 @Service
-public class EarthQuakeClient implements EarthquakeDataProcessor,EarthQuakeDataExporter{
+public class EarthQuakeClientImpl implements EarthquakeDataProcessor,EarthQuakeDataExporter{
 
     @Value("classpath:/data/nov20quakedatasmall.atom")
     private Resource atomFileResource;
-    private static final Logger logger = LoggerFactory.getLogger(EarthQuakeClient.class);
+    private static final Logger logger = LoggerFactory.getLogger(EarthQuakeClientImpl.class);
 
-    public EarthQuakeClient() {
+    public EarthQuakeClientImpl() {
     }
     @Override
     public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
@@ -69,14 +69,16 @@ public class EarthQuakeClient implements EarthquakeDataProcessor,EarthQuakeDataE
     }
     @Override
     public void bigQuakes() {
-        ArrayList<QuakeEntry> largeQuakes = new ArrayList<>();
+
+        ArrayList<QuakeEntry> largeQuakes = new ArrayList<QuakeEntry>();
         ArrayList<QuakeEntry> list = new ArrayList<>();
+
         try {
             EarthQuakeParser parser = new EarthQuakeParser();
 //            String source = "data/nov20quakedatasmall.atom";
 //            logger.info("Reading earthquake data from {}", source);
 
-            list = parser.read(String.valueOf(atomFileResource));
+            list = parser.read(String.valueOf(atomFileResource.toString()));
             logger.debug("Total earthquakes read: {}", list.size());
 
             largeQuakes = filterByMagnitude(list, 5.0);
@@ -91,5 +93,7 @@ public class EarthQuakeClient implements EarthquakeDataProcessor,EarthQuakeDataE
             logger.info("Read data for {} quakes", list.size());
         }
     }
+
+
 
 }
