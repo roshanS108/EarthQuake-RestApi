@@ -26,16 +26,7 @@ import org.springframework.stereotype.Service;
  * <p>
  * Usage examples:
  * - Creating an instance of {@code EarthQuakeClient} and filtering earthquakes by depth:
- * <pre>{@code
- *   EarthQuakeClient client = new EarthQuakeClient();
- *   client.quakesOfDepth();
- *   }</pre>
  * <p>
- * - Generating a CSV file of earthquake data:
- * <pre>{@code
- *   EarthQuakeClient client = new EarthQuakeClient();
- *   client.createCSV();
- *   }</pre>
  * <p>
 
  */

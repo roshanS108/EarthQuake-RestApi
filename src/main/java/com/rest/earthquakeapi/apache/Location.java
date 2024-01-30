@@ -14,18 +14,7 @@ package com.rest.earthquakeapi.apache;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- *
- *
- *
- * Copyright (C) 2015 Duke University
- *
- * (same license as above)
- *
- * Revised on November 8, 2015 for use by Team Duke Software
- * and hereby released with the same Apache 2.0 license
- * Adoption consisting of removing all methods and fields that
- * are Android specific so that the file compiles and can be used
- * outside of Android. Also added constructor with Latitude and Longitude.
+
  */
 
 import java.text.DecimalFormat;
