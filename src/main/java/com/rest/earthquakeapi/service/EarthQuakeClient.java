@@ -52,14 +52,18 @@ public class EarthQuakeClient {
     public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
                                                    double magMin) {
         if(quakeData == null){
+            logger.error("Quake data is null.");
             throw new IllegalArgumentException("quakeData cannot be null");
         }
         if(magMin < 0){
+            logger.error("Negative magnitude minimum: {}", magMin);
             throw new IllegalArgumentException("magMin must be non-negative");
         }
-        return quakeData.stream()
+        ArrayList<QuakeEntry> filteredList = quakeData.stream()
                 .filter(quakeEntry -> quakeEntry.getMagnitude() > magMin)
                 .collect(Collectors.toCollection(ArrayList::new));
+        logger.info("Filtered earthquakes by magnitude greater than {}. Number of quakes: {}", magMin, filteredList.size());
+        return filteredList;
     }
 
     /**
