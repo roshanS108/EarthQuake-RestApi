@@ -1,6 +1,6 @@
-package com.rest.earthquakeapi.earthquakerestapi.model;
+package com.rest.earthquakeapi.model;
 
-import com.rest.earthquakeapi.earthquakerestapi.apache.Location;
+import com.rest.earthquakeapi.apache.Location;
 
 /**
  * Represents a single earthquake entry.

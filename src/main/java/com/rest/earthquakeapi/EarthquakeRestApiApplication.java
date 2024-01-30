@@ -1,4 +1,4 @@
-package com.rest.earthquakeapi.earthquakerestapi;
+package com.rest.earthquakeapi;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

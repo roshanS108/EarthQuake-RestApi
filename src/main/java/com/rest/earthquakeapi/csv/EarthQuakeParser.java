@@ -1,4 +1,4 @@
-package com.rest.earthquakeapi.earthquakerestapi.csv;
+package com.rest.earthquakeapi.csv;
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
@@ -6,7 +6,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import com.rest.earthquakeapi.earthquakerestapi.model.QuakeEntry;
+import com.rest.earthquakeapi.model.QuakeEntry;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 

@@ -1,0 +1,26 @@
+2024-01-30 15:18:45,904 [INFO] com.rest.earthquakeapi.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 24518 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-01-30 15:18:45,910 [INFO] com.rest.earthquakeapi.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-01-30 15:18:47,138 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port 8080 (http)
+2024-01-30 15:18:47,151 [INFO] org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2024-01-30 15:18:47,152 [INFO] org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-01-30 15:18:47,205 [INFO] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2024-01-30 15:18:47,205 [INFO] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1208 ms
+2024-01-30 15:18:47,418 [DEBUG] org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping [main] 3 mappings in 'requestMappingHandlerMapping'
+2024-01-30 15:18:47,470 [DEBUG] org.springframework.web.servlet.handler.SimpleUrlHandlerMapping [main] Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2024-01-30 15:18:47,487 [DEBUG] org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter [main] ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2024-01-30 15:18:47,513 [DEBUG] org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver [main] ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2024-01-30 15:18:47,589 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port 8080 (http) with context path ''
+2024-01-30 15:18:47,599 [INFO] com.rest.earthquakeapi.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 2.488 seconds (process running for 3.753)
+2024-01-30 15:19:55,320 [INFO] com.rest.earthquakeapi.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 24683 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-01-30 15:19:55,323 [INFO] com.rest.earthquakeapi.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-01-30 15:19:56,478 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat initialized with port 8080 (http)
+2024-01-30 15:19:56,494 [INFO] org.apache.catalina.core.StandardService [main] Starting service [Tomcat]
+2024-01-30 15:19:56,494 [INFO] org.apache.catalina.core.StandardEngine [main] Starting Servlet engine: [Apache Tomcat/10.1.18]
+2024-01-30 15:19:56,549 [INFO] org.apache.catalina.core.ContainerBase.[Tomcat].[localhost].[/] [main] Initializing Spring embedded WebApplicationContext
+2024-01-30 15:19:56,549 [INFO] org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext [main] Root WebApplicationContext: initialization completed in 1118 ms
+2024-01-30 15:19:56,771 [DEBUG] org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping [main] 3 mappings in 'requestMappingHandlerMapping'
+2024-01-30 15:19:56,850 [DEBUG] org.springframework.web.servlet.handler.SimpleUrlHandlerMapping [main] Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
+2024-01-30 15:19:56,879 [DEBUG] org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter [main] ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2024-01-30 15:19:56,914 [DEBUG] org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver [main] ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2024-01-30 15:19:57,024 [INFO] org.springframework.boot.web.embedded.tomcat.TomcatWebServer [main] Tomcat started on port 8080 (http) with context path ''
+2024-01-30 15:19:57,039 [INFO] com.rest.earthquakeapi.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 2.595 seconds (process running for 3.551)

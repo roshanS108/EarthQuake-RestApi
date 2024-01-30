@@ -1,13 +1,13 @@
-package com.rest.earthquakeapi.earthquakerestapi.service;
+package com.rest.earthquakeapi.service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import com.rest.earthquakeapi.earthquakerestapi.apache.Location;
-import com.rest.earthquakeapi.earthquakerestapi.csv.EarthQuakeParser;
-import com.rest.earthquakeapi.earthquakerestapi.model.QuakeEntry;
+import com.rest.earthquakeapi.apache.Location;
+import com.rest.earthquakeapi.csv.EarthQuakeParser;
+import com.rest.earthquakeapi.model.QuakeEntry;
 import org.springframework.stereotype.Service;
 
 /**

@@ -1,4 +1,4 @@
-package com.rest.earthquakeapi.earthquakerestapi.apache;
+package com.rest.earthquakeapi.apache;
 
 /*
  * Copyright (C) 2007 The Android Open Source Project
