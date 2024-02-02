@@ -1,15 +1,17 @@
 package com.rest.earthquakeapi.service;
-
+import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
-
+import org.apache.tomcat.util.file.ConfigurationSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import com.rest.earthquakeapi.apache.Location;
 import com.rest.earthquakeapi.csv.EarthQuakeParser;
 import com.rest.earthquakeapi.model.QuakeEntry;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 /**
@@ -31,13 +33,15 @@ import org.springframework.stereotype.Service;
 
  */
 @Service
-public class EarthQuakeClientImpl implements EarthquakeDataProcessor,EarthQuakeDataExporter{
-
-    @Value("classpath:/data/nov20quakedatasmall.atom")
-    private Resource atomFileResource;
+public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuakeDataExporter {
+    private final ResourceLoader resourceLoader;
     private static final Logger logger = LoggerFactory.getLogger(EarthQuakeClientImpl.class);
+    private final Resource fileResource;
 
-    public EarthQuakeClientImpl() {
+    @Autowired
+    public EarthQuakeClientImpl(ResourceLoader resourceLoader) {
+        this.resourceLoader = resourceLoader;
+        this.fileResource = this.resourceLoader.getResource("classpath:/data/nov20quakedatasmall.atom");
     }
     @Override
     public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
@@ -69,16 +73,14 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor,EarthQuakeD
     }
     @Override
     public void bigQuakes() {
-
         ArrayList<QuakeEntry> largeQuakes = new ArrayList<QuakeEntry>();
         ArrayList<QuakeEntry> list = new ArrayList<>();
-
         try {
             EarthQuakeParser parser = new EarthQuakeParser();
-//            String source = "data/nov20quakedatasmall.atom";
-//            logger.info("Reading earthquake data from {}", source);
-
-            list = parser.read(String.valueOf(atomFileResource.toString()));
+            // Reading data from the fileResource
+            try (InputStream is = fileResource.getInputStream()) {
+                list = parser.read(is.toString());
+            }
             logger.debug("Total earthquakes read: {}", list.size());
 
             largeQuakes = filterByMagnitude(list, 5.0);
@@ -86,7 +88,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor,EarthQuakeD
 
             // Print each quake from the filtered list
             largeQuakes.forEach(quake -> logger.info(quake.toString()));
-
         } catch (Exception e) {
             logger.error("Error processing earthquake data: ", e);
         } finally {
