@@ -1,17 +1,11 @@
 package com.rest.earthquakeapi.service;
-import java.io.InputStream;
 import java.util.*;
 import java.util.stream.Collectors;
-import org.apache.tomcat.util.file.ConfigurationSource;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
-import com.rest.earthquakeapi.apache.Location;
 import com.rest.earthquakeapi.csv.EarthQuakeParser;
 import com.rest.earthquakeapi.model.QuakeEntry;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 /**
@@ -34,14 +28,10 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuakeDataExporter {
-    private final ResourceLoader resourceLoader;
     private static final Logger logger = LoggerFactory.getLogger(EarthQuakeClientImpl.class);
-    private final Resource fileResource;
 
-    @Autowired
-    public EarthQuakeClientImpl(ResourceLoader resourceLoader) {
-        this.resourceLoader = resourceLoader;
-        this.fileResource = this.resourceLoader.getResource("classpath:/data/nov20quakedatasmall.atom");
+    public EarthQuakeClientImpl(){
+
     }
     @Override
     public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
@@ -72,29 +62,27 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuake
         }
     }
     @Override
-    public void bigQuakes() {
-        ArrayList<QuakeEntry> largeQuakes = new ArrayList<QuakeEntry>();
-        ArrayList<QuakeEntry> list = new ArrayList<>();
+    public List<QuakeEntry> bigQuakes() {
         try {
             EarthQuakeParser parser = new EarthQuakeParser();
-            // Reading data from the fileResource
-            try (InputStream is = fileResource.getInputStream()) {
-                list = parser.read(is.toString());
+            String source = "data/nov20quakedatasmall.atom";
+            ArrayList<QuakeEntry> list = parser.read(source);
+            ArrayList<QuakeEntry> largeQuakes = filterByMagnitude(list, 5.0);
+
+            // Logging earthquakes
+            for (QuakeEntry qe : largeQuakes) {
+                logger.info("Magnitude: {}, Location: {}, Info: {}",
+                        qe.getMagnitude(),
+                        qe.getLocation(),
+                        qe.getInfo());
             }
-            logger.debug("Total earthquakes read: {}", list.size());
-
-            largeQuakes = filterByMagnitude(list, 5.0);
-            logger.info("Number of earthquakes with magnitude 5.0 and above: {}", largeQuakes.size());
-
-            // Print each quake from the filtered list
-            largeQuakes.forEach(quake -> logger.info(quake.toString()));
-        } catch (Exception e) {
-            logger.error("Error processing earthquake data: ", e);
-        } finally {
+            long count = largeQuakes.stream().count();
+            logger.info("Number of earthquakes with magnitude greater than 5.0: {}", count);
             logger.info("Read data for {} quakes", list.size());
+            return largeQuakes;
+        } catch (Exception e) {
+            logger.error("An error occurred while processing earthquake data.", e);
+            throw new RuntimeException("Error processing earthquake data.", e);
         }
     }
-
-
-
 }
