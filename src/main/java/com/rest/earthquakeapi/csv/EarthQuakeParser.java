@@ -34,19 +34,26 @@ public class EarthQuakeParser {
             //Document document = builder.parse("http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom");
 
             NodeList nodeList = document.getDocumentElement().getChildNodes();
-
             ArrayList<QuakeEntry> list = new ArrayList<QuakeEntry>();
-
             for(int k=0; k < nodeList.getLength(); k++){
                 Node node = nodeList.item(k);
 
                 if (node.getNodeName().equals("entry")) {
                     Element elem = (Element) node;
+                    // Get a NodeList containing all elements with the tag name "georss:point" within the "entry" node.
                     NodeList t1 = elem.getElementsByTagName("georss:point");
                     NodeList t2 = elem.getElementsByTagName("title");
                     NodeList t3 = elem.getElementsByTagName("georss:elev");
+
+                    NodeList idNode = elem.getElementsByTagName("id");
+
+//                    NodeList dateTime = elem.getElementsByTagName("dl").item(0).getChildNodes();
+
+//                    NodeList link = elem.getElementsByTagName("link").item(0).getAttributes().getNamedItem("href").getChildNodes();
+
                     double lat = 0.0, lon = 0.0, depth = 0.0;
                     String title = "NO INFORMATION";
+                    String id = "";
                     double mag = 0.0;
 
                     if (t1 != null) {
@@ -58,8 +65,8 @@ public class EarthQuakeParser {
                     }
                     if (t2 != null){
                         String s2 = t2.item(0).getChildNodes().item(0).getNodeValue();
-
                         String mags = s2.substring(2,s2.indexOf(" ",2));
+                        System.out.println("the mags is: " + mags);
                         if (mags.contains("?")) {
                             mag = 0.0;
                             System.err.println("unknown magnitude in data");
@@ -68,8 +75,9 @@ public class EarthQuakeParser {
                             mag = Double.parseDouble(mags);
                             //System.out.println("mag= "+mag);
                         }
-                        int sp = s2.indexOf(" ",5);
+                        int sp = s2.indexOf(" ",5); //6
                         title = s2.substring(sp+1);
+                        System.out.println("the title is: " + title);
                         if (title.startsWith("-")){
                             int pos = title.indexOf(" ");
                             title = title.substring(pos+1);
@@ -79,7 +87,13 @@ public class EarthQuakeParser {
                         String s2 = t3.item(0).getChildNodes().item(0).getNodeValue();
                         depth = Double.parseDouble(s2);
                     }
-                    QuakeEntry loc = new QuakeEntry(lat,lon,mag,title,depth);
+                    if(idNode!=null){
+                        String s2 = idNode.item(0).getChildNodes().item(0).getNodeValue();
+                        id = s2.substring(s2.indexOf(':', s2.indexOf(':', s2.indexOf(':') + 1) + 1) + 1);
+                    }
+                    // Create QuakeEntry object with new fields
+//                    QuakeEntry loc = new QuakeEntry(id, mag, lat,lon,depth, title, dateTime, link);
+                    QuakeEntry loc = new QuakeEntry(id,lat,lon,mag,title,depth);
                     list.add(loc);
                 }
 
@@ -102,7 +116,8 @@ public class EarthQuakeParser {
         EarthQuakeParser xp = new EarthQuakeParser();
         //String source = "data/2.5_week.atom";
         //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
-        String source = "data/nov20quakedata.atom";
+        String source = "data/nov20quakedatasmall.atom";
+        String data ="M 1.7 - 75km WSW of Cantwell, Alaska";
         ArrayList<QuakeEntry> list  = xp.read(source);
         Collections.sort(list);
         for(QuakeEntry loc : list){
