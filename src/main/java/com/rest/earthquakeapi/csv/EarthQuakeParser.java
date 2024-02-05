@@ -6,17 +6,14 @@ import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 public class EarthQuakeParser {
     public EarthQuakeParser() {
 
     }
-
     public ArrayList<QuakeEntry> read(String source) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
@@ -43,30 +40,39 @@ public class EarthQuakeParser {
                 if (node.getNodeName().equals("entry")) {
                     Element elem = (Element) node;
                     // Get a NodeList containing all elements with the tag name "georss:point" within the "entry" node.
+                    //retrieves the magnitude of earthquake.
                     NodeList t1 = elem.getElementsByTagName("georss:point");
+
+                    //retrieves the "title" info of the place where earth quake occurred. ex --->75km WSW of Cantwell, Alaska
                     NodeList t2 = elem.getElementsByTagName("title");
+
+                    //retrieves the depth of earthquake
                     NodeList t3 = elem.getElementsByTagName("georss:elev");
 
                     NodeList idNode = elem.getElementsByTagName("id");
 
+                    //retrieving the dateTime from <summary> element
                     NodeList dateTime = elem.getElementsByTagName("summary");
 
-//                    NodeList link = elem.getElementsByTagName("link").item(0).getAttributes().getNamedItem("href").getChildNodes();
+                    //retrieves the <link> element
+                    NodeList linkList = elem.getElementsByTagName("link");
 
                     double lat = 0.0, lon = 0.0, depth = 0.0;
                     String title = "NO INFORMATION";
                     String id = "";
                     String date = "";
+
+                    String link = "";
                     double mag = 0.0;
 
-                    if (t1 != null) {
+                    if (t1 != null && dateTime.getLength()>0) {
                         String s2 = t1.item(0).getChildNodes().item(0).getNodeValue();
                         //System.out.print("point2: "+s2);
                         String[] args = s2.split(" ");
                         lat = Double.parseDouble(args[0]);
                         lon = Double.parseDouble(args[1]);
                     }
-                    if (t2 != null){
+                    if (t2 != null && dateTime.getLength()>0){
                         String s2 = t2.item(0).getChildNodes().item(0).getNodeValue();
                         String mags = s2.substring(2,s2.indexOf(" ",2));
                         System.out.println("the mags is: " + mags);
@@ -86,11 +92,11 @@ public class EarthQuakeParser {
                             title = title.substring(pos+1);
                         }
                     }
-                    if (t3 != null){
+                    if (t3 != null && dateTime.getLength()>0){
                         String s2 = t3.item(0).getChildNodes().item(0).getNodeValue();
                         depth = Double.parseDouble(s2);
                     }
-                    if(idNode!=null){
+                    if(idNode!=null && dateTime.getLength()>0){
                         String s2 = idNode.item(0).getChildNodes().item(0).getNodeValue();
                         id = s2.substring(s2.indexOf(':', s2.indexOf(':', s2.indexOf(':') + 1) + 1) + 1);
                     }
@@ -99,13 +105,13 @@ public class EarthQuakeParser {
                         Node summaryNode = dateTime.item(0);
                         String summaryText = summaryNode.getTextContent();
 
-                        // Replace &deg; entity with the degree symbol
+                        // replace &deg; entity with the degree symbol
                         summaryText = summaryText.replace("&deg;", "°");
 
                         // wrapping summaryText with a root element
                         summaryText = "<root>" + summaryText + "</root>";
 
-                        // Initialize the DocumentBuilderFactory and configure it
+                        // init the DocumentBuilderFactory and configure it
                         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
                         try {
                             dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
@@ -142,9 +148,18 @@ public class EarthQuakeParser {
                             e.printStackTrace();
                         }
                     }
-                    // Create QuakeEntry object with new fields
+
+
+                    if (linkList != null && linkList.getLength() > 0) {
+                        Node linkNode = linkList.item(0); // Get the first <link> element
+
+                        String hrefValue = ((Element) linkNode).getAttribute("href");
+                        link = hrefValue;
+                        System.out.println("Href attribute value is: " + link);
+                    }
+                        // Create QuakeEntry object with new fields
 //                    QuakeEntry loc = new QuakeEntry(id, mag, lat,lon,depth, title, dateTime, link);
-                    QuakeEntry loc = new QuakeEntry(id,lat,lon,mag,title,depth,date);
+                    QuakeEntry loc = new QuakeEntry(id,lat,lon,mag,title,depth,date,link);
                     list.add(loc);
                 }
 
