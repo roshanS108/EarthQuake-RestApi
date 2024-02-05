@@ -1,6 +1,8 @@
 package com.rest.earthquakeapi.model;
 
 import com.rest.earthquakeapi.apache.Location;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * Represents a single earthquake entry.
@@ -26,19 +28,41 @@ import com.rest.earthquakeapi.apache.Location;
 
 public class QuakeEntry implements Comparable<QuakeEntry>{
 
+    private String id;
+
     private Location myLocation;
     private String title;
     private double depth;
     private double magnitude;
 
-    public QuakeEntry(double lat, double lon, double mag,
-                      String t, double d) {
-        myLocation = new Location(lat,lon);
+    private String dateTime; //date of when earthquake occurred
 
+    private String link; //specifies links related to the feed
+
+
+
+    // Constructor
+//    public QuakeEntry(String id, double lat, double lon, double mag,
+//                      String t, double d, String dateTime, String link) {
+//        this.myLocation = new Location(lat,lon);
+//        this.id = id;
+//        this.magnitude = mag;
+//        this.title = t;
+//        this.depth = d;
+//        this.dateTime = dateTime;
+//        this.link = link;
+//    }
+
+    public QuakeEntry(String id2, double lat, double lon, double mag,
+                      String t, double d, String date) {
+        myLocation = new Location(lat,lon);
+        id = id2;
         magnitude = mag;
         title = t;
         depth = d;
+        dateTime = date;
     }
+
 
     public Location getLocation(){
         return myLocation;
@@ -72,6 +96,29 @@ public class QuakeEntry implements Comparable<QuakeEntry>{
         return 0;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getDateTime() {
+        return dateTime;
+    }
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public String getLink() {
+        return link;
+    }
+
+    public void setLink(String link) {
+        this.link = link;
+    }
 
     public String toString(){
         return String.format("(%3.2f, %3.2f), mag = %3.2f, depth = %3.2f, title = %s", myLocation.getLatitude(),myLocation.getLongitude(),magnitude,depth,title);
