@@ -1,6 +1,7 @@
 package com.rest.earthquakeapi.csv;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -8,6 +9,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.w3c.dom.*;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 public class EarthQuakeParser {
@@ -47,13 +49,14 @@ public class EarthQuakeParser {
 
                     NodeList idNode = elem.getElementsByTagName("id");
 
-//                    NodeList dateTime = elem.getElementsByTagName("dl").item(0).getChildNodes();
+                    NodeList dateTime = elem.getElementsByTagName("summary");
 
 //                    NodeList link = elem.getElementsByTagName("link").item(0).getAttributes().getNamedItem("href").getChildNodes();
 
                     double lat = 0.0, lon = 0.0, depth = 0.0;
                     String title = "NO INFORMATION";
                     String id = "";
+                    String date = "";
                     double mag = 0.0;
 
                     if (t1 != null) {
@@ -91,6 +94,53 @@ public class EarthQuakeParser {
                         String s2 = idNode.item(0).getChildNodes().item(0).getNodeValue();
                         id = s2.substring(s2.indexOf(':', s2.indexOf(':', s2.indexOf(':') + 1) + 1) + 1);
                     }
+
+                    // Retrieve all <dl> elements from the parsed summary text
+                    if (dateTime != null && dateTime.getLength() > 0) {
+                        Node summaryNode = dateTime.item(0);
+                        String summaryText = summaryNode.getTextContent();
+
+                        System.out.println("summaryText is: " + summaryText);
+
+                        summaryText = summaryText.replace("&deg;", "°");
+
+                        // Directly parse the summary text as XML
+                        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+                        try {
+                            dbf.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
+                        } catch (ParserConfigurationException e) {
+                            e.printStackTrace();
+                        }
+                        DocumentBuilder db = dbf.newDocumentBuilder();
+                        InputSource is = new InputSource(new StringReader(summaryText));
+                        Document summaryDoc = db.parse(is);
+                        System.out.println("summary Doc is: " + summaryDoc);
+
+                        // Retrieve the <dl> element from the parsed summary
+                        NodeList dlList = summaryDoc.getElementsByTagName("dl");
+                        if (dlList != null && dlList.getLength() > 0) {
+                            Node dlNode = dlList.item(0); // Get the first <dl> element
+                            NodeList childNodes = dlNode.getChildNodes();
+                            for (int i = 0; i < childNodes.getLength(); i++) {
+                                Node child = childNodes.item(i);
+
+                                // Check if the child node is a <dd> element
+                                if (child.getNodeType() == Node.ELEMENT_NODE && "dd".equals(child.getNodeName())) {
+                                    date = child.getTextContent().trim();
+                                    System.out.println("Date and Time: " + date);
+                                    break; // Break after finding the first <dd>
+                                }
+                            }
+                        } else {
+                            System.out.println("No <dl> elements found within <summary>");
+                        }
+                    } else {
+                        System.out.println("No <summary> element found");
+                    }
+
+
+
+
                     // Create QuakeEntry object with new fields
 //                    QuakeEntry loc = new QuakeEntry(id, mag, lat,lon,depth, title, dateTime, link);
                     QuakeEntry loc = new QuakeEntry(id,lat,lon,mag,title,depth);
