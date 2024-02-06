@@ -40,8 +40,6 @@ public class QuakeEntry implements Comparable<QuakeEntry>{
     private String link; //specifies links related to the feed
 
 
-
-
     //default constructor
     public QuakeEntry(){
 
@@ -56,8 +54,6 @@ public class QuakeEntry implements Comparable<QuakeEntry>{
         dateTime = date;
         this.link = link;
     }
-
-
     public Location getLocation(){
         return myLocation;
     }
@@ -117,5 +113,6 @@ public class QuakeEntry implements Comparable<QuakeEntry>{
     public String toString(){
         return String.format("(%3.2f, %3.2f), mag = %3.2f, depth = %3.2f, title = %s", myLocation.getLatitude(),myLocation.getLongitude(),magnitude,depth,title);
     }
+
 
 }
