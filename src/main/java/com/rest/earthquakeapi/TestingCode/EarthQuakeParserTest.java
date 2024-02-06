@@ -69,15 +69,15 @@ public class EarthQuakeParserTest {
                     System.out.println("the dateTime is : " + dateTime);
 
                     //depth parser
-                    depth = (double) depthParser.parseElement(elem);
+                    depth = depthParser.parseElement(elem);
 
-                    String id = (String) idParser.parseElement(elem);
+                    String id = idParser.parseElement(elem);
 
-                    String link = (String) linkParser.parseElement(elem);
+                    String link = linkParser.parseElement(elem);
 
-                    double mag = (Double) magParser.parseElement(elem);
+                    double mag = magParser.parseElement(elem);
 
-                    String title = (String) titleMagParser.parseElement(elem);
+                    String title = titleMagParser.parseElement(elem);
 
 
                     QuakeEntry loc = new QuakeEntry(id,lat,lon,mag,title,depth,dateTime,link);
