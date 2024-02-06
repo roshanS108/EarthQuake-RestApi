@@ -1,4 +1,4 @@
-package com.rest.earthquakeapi.csv;
+package com.rest.earthquakeapi.ParserManager;
 
 import com.rest.earthquakeapi.XMLParsing.*;
 import com.rest.earthquakeapi.model.QuakeEntry;
