@@ -24,8 +24,4 @@ public class LinkParser implements ElementParser<String>{
 
     }
 
-    @Override
-    public boolean satisfies() {
-        return false;
-    }
 }

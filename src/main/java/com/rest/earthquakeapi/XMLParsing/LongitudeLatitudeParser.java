@@ -1,13 +1,11 @@
 package com.rest.earthquakeapi.XMLParsing;
-
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 public class LongitudeLatitudeParser implements ElementParser<Double>{
-
     private double latitude;
     private double longitude;
+
     @Override
     public Double parseElement(Element element) {
         NodeList t1 = element.getElementsByTagName("georss:point");
@@ -26,9 +24,8 @@ public class LongitudeLatitudeParser implements ElementParser<Double>{
         return 0.0;
     }
 
-    @Override
-    public boolean satisfies() {
-        return false;
-    }
+
+
+
 
 }

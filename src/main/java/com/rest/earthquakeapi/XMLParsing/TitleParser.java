@@ -4,7 +4,7 @@ import com.rest.earthquakeapi.model.QuakeEntry;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class TitleParser implements ElementParser {
+public class TitleParser implements ElementParser<String> {
 
     public TitleParser() {
 
@@ -27,12 +27,6 @@ public class TitleParser implements ElementParser {
         }
         return title;
     }
-
-    @Override
-    public boolean satisfies() {
-        return false;
-    }
-
 
 }
 

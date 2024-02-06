@@ -77,8 +77,4 @@ public class DateTimeParser implements ElementParser<String>{
 
     }
 
-    @Override
-    public boolean satisfies() {
-        return false;
-    }
 }

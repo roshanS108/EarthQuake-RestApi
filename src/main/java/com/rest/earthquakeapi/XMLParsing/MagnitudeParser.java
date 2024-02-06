@@ -29,9 +29,6 @@ public class MagnitudeParser implements ElementParser<Double> {
 
     }
 
-    @Override
-    public boolean satisfies() {
-        return false;
-    }
+
 
 }

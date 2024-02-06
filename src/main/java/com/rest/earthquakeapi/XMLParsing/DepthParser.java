@@ -19,8 +19,6 @@ public class DepthParser implements ElementParser<Double>{
         return 0.0;
     }
 
-    @Override
-    public boolean satisfies() {
-        return false;
-    }
+
+
 }

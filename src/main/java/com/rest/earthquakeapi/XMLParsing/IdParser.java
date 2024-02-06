@@ -1,11 +1,7 @@
 package com.rest.earthquakeapi.XMLParsing;
-import java.util.*;
-import com.rest.earthquakeapi.model.QuakeEntry;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-
 public class IdParser implements ElementParser<String>{
-
     @Override
     public String parseElement(Element element) {
         NodeList idNode = element.getElementsByTagName("id");
@@ -19,8 +15,5 @@ public class IdParser implements ElementParser<String>{
         return null;
     }
 
-    @Override
-    public boolean satisfies() {
-        return false;
-    }
+
 }
