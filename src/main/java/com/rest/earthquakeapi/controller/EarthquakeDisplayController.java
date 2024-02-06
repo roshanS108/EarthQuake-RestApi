@@ -25,7 +25,7 @@ public class EarthquakeDisplayController {
             List<QuakeEntry> largeQuakes = earthquakeDataProcessor.bigQuakes();
             return ResponseEntity.ok(largeQuakes);
         } catch (Exception e) {
-            // Log the exception and return an appropriate response
+            // Log the exception and returning an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
