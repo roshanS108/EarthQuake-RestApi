@@ -1,8 +1,6 @@
 package com.rest.earthquakeapi.TestingCode;
 
-import com.rest.earthquakeapi.XMLParsing.ElementParser;
-import com.rest.earthquakeapi.XMLParsing.IdParser;
-import com.rest.earthquakeapi.csv.EarthQuakeParser;
+import com.rest.earthquakeapi.XMLParsing.*;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -21,11 +19,9 @@ import java.util.Collections;
 public class EarthQuakeParserTest {
     public EarthQuakeParserTest() {
     }
-
     public ArrayList<QuakeEntry> read(String source) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         ArrayList<QuakeEntry> list = new ArrayList<QuakeEntry>();
-
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document = null;
@@ -35,26 +31,58 @@ public class EarthQuakeParserTest {
             } else {
                 document = builder.parse(new File(source));
             }
-
             NodeList nodeList = document.getDocumentElement().getChildNodes();
 
-            // Create an instance of IdParser
-            ElementParser idParser = new IdParser();
+            // Create an instance of Parser object
+            ElementParser<String> idParser = new IdParser();
+            ElementParser<String> titleMagParser = new TitleParser();
+            ElementParser<String> dateTimeParser =  new DateTimeParser();
+            ElementParser<Double> depthParser = new DepthParser();
+            ElementParser<String> linkParser = new LinkParser();
+            ElementParser<Double> magParser = new MagnitudeParser();
+
 
             for (int k = 0; k < nodeList.getLength(); k++) {
                 Node node = nodeList.item(k);
 
                 if (node.getNodeName().equals("entry")) {
                     Element elem = (Element) node;
-                    QuakeEntry quakeEntry = new QuakeEntry();
 
-                    // Use IdParser to parse and set the ID
-                    idParser.parseElement(elem, quakeEntry);
+                    //retrieves the latitude and longittude of earthquake.
+                    NodeList t1 = elem.getElementsByTagName("georss:point");
 
-                    // ... other parsing logic here ...
+                    double lat = 0.0, lon = 0.0, depth = 0.0;
 
+                    if (t1 != null && t1.getLength()>0) {
+                        String s2 = t1.item(0).getChildNodes().item(0).getNodeValue();
+                        //System.out.print("point2: "+s2);
+                        String[] args = s2.split(" ");
+                        lat = Double.parseDouble(args[0]);
+                        lon = Double.parseDouble(args[1]);
+                    }
+
+                    System.out.println("t1 is : " + lat + " " + lon);
+
+
+
+                    String dateTime = (String) dateTimeParser.parseElement(elem);
+                    System.out.println("the dateTime is : " + dateTime);
+
+                    //depth parser
+                    depth = (double) depthParser.parseElement(elem);
+
+                    String id = (String) idParser.parseElement(elem);
+
+                    String link = (String) linkParser.parseElement(elem);
+
+                    double mag = (Double) magParser.parseElement(elem);
+
+                    String title = (String) titleMagParser.parseElement(elem);
+
+
+                    QuakeEntry loc = new QuakeEntry(id,lat,lon,mag,title,depth,dateTime,link);
                     // Add the quakeEntry to the list
-                    list.add(quakeEntry);
+                    list.add(loc);
                 }
             }
         } catch (ParserConfigurationException | SAXException | IOException e) {
@@ -76,7 +104,6 @@ public class EarthQuakeParserTest {
             System.out.println(loc);
         }
         System.out.println("# quakes = "+list.size());
-
 
 
     }
