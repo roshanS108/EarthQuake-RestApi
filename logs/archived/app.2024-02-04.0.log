@@ -1,0 +1,36 @@
+2024-02-04 18:23:35,827 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 12615 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-02-04 18:23:35,836 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-02-04 18:23:35,837 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-02-04 18:23:38,037 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 3.266 seconds (process running for 5.01)
+2024-02-04 18:23:41,257 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Filtered earthquakes by magnitude greater than 5.0. Number of quakes: 3
+2024-02-04 18:23:41,258 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.5, Location: Location[null 26.379400,142.705500 acc=??? t=?!?], Info: 91km SSE of Chichi-shima, Japan
+2024-02-04 18:23:41,258 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -11.627000,165.516500 acc=??? t=?!?], Info: 106km SSW of Lata, Solomon Islands
+2024-02-04 18:23:41,258 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -24.666500,-175.932600 acc=??? t=?!?], Info: South of Tonga
+2024-02-04 18:23:41,259 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Number of earthquakes with magnitude greater than 5.0: 3
+2024-02-04 18:23:41,259 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Read data for 25 quakes
+2024-02-04 18:25:55,661 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 12888 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-02-04 18:25:55,662 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-02-04 18:25:55,663 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-02-04 18:25:56,739 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.451 seconds (process running for 2.147)
+2024-02-04 18:25:59,698 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Filtered earthquakes by magnitude greater than 5.0. Number of quakes: 3
+2024-02-04 18:25:59,699 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.5, Location: Location[null 26.379400,142.705500 acc=??? t=?!?], Info: 91km SSE of Chichi-shima, Japan
+2024-02-04 18:25:59,700 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -11.627000,165.516500 acc=??? t=?!?], Info: 106km SSW of Lata, Solomon Islands
+2024-02-04 18:25:59,700 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -24.666500,-175.932600 acc=??? t=?!?], Info: South of Tonga
+2024-02-04 18:25:59,701 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Number of earthquakes with magnitude greater than 5.0: 3
+2024-02-04 18:25:59,701 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Read data for 25 quakes
+2024-02-04 18:26:37,545 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 13035 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-02-04 18:26:37,546 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-02-04 18:26:37,547 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-02-04 18:26:38,584 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.382 seconds (process running for 2.034)
+2024-02-04 18:26:40,322 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Filtered earthquakes by magnitude greater than 5.0. Number of quakes: 3
+2024-02-04 18:26:40,324 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.5, Location: Location[null 26.379400,142.705500 acc=??? t=?!?], Info: 91km SSE of Chichi-shima, Japan
+2024-02-04 18:26:40,325 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -11.627000,165.516500 acc=??? t=?!?], Info: 106km SSW of Lata, Solomon Islands
+2024-02-04 18:26:40,325 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -24.666500,-175.932600 acc=??? t=?!?], Info: South of Tonga
+2024-02-04 18:26:40,326 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Number of earthquakes with magnitude greater than 5.0: 3
+2024-02-04 18:26:40,327 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Read data for 25 quakes
+2024-02-04 18:26:43,736 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-2] Filtered earthquakes by magnitude greater than 5.0. Number of quakes: 3
+2024-02-04 18:26:43,736 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-2] Magnitude: 5.5, Location: Location[null 26.379400,142.705500 acc=??? t=?!?], Info: 91km SSE of Chichi-shima, Japan
+2024-02-04 18:26:43,737 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-2] Magnitude: 5.1, Location: Location[null -11.627000,165.516500 acc=??? t=?!?], Info: 106km SSW of Lata, Solomon Islands
+2024-02-04 18:26:43,737 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-2] Magnitude: 5.1, Location: Location[null -24.666500,-175.932600 acc=??? t=?!?], Info: South of Tonga
+2024-02-04 18:26:43,737 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-2] Number of earthquakes with magnitude greater than 5.0: 3
+2024-02-04 18:26:43,737 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-2] Read data for 25 quakes
