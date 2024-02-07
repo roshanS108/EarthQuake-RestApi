@@ -1,4 +1,4 @@
-package com.rest.earthquakeapi.controller;
+package com.rest.earthquakeapi.restcontroller;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
