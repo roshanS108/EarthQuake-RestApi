@@ -1,5 +1,6 @@
 package com.rest.earthquakeapi.service;
-import com.rest.earthquakeapi.csv.EarthQuakeParser;
+import com.rest.earthquakeapi.ParserManager.EarthQuakeParser;
+import com.rest.earthquakeapi.apache.Location;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -86,4 +87,51 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuake
             throw new RuntimeException("Error processing earthquake data.", e);
         }
     }
+
+    @Override
+    public List<QuakeEntry> earthQuakesNearMe(double distMax, Location from) {
+        EarthQuakeParser parser = new EarthQuakeParser();
+//        String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        String source = "data/nov20quakedatasmall.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
+        System.out.println("read data for " + list.size() + " quakes");
+
+        // This location is Durham, NC
+//        Location city = new Location(35.988, -78.907);
+
+        // This location is Bridgeport, CA
+        Location city = new Location(38.17, -118.82);
+
+        List<QuakeEntry>closeEarthQuakes = filterByDistanceFrom(list, distMax, from);
+        closeEarthQuakes.forEach(quakeEntry ->
+                System.out.println((quakeEntry.getLocation().distanceTo(city) / 1000) + " " + quakeEntry.getInfo()));
+
+        System.out.println("Found " + closeEarthQuakes.size() + " that match that criteria");
+
+        return closeEarthQuakes;
+    }
+
+    /**
+     * Filters and returns a list of earthquake entries (QuakeEntry) that are within a specified maximum distance
+     * from a given location.
+     *
+     * @param quakeData An ArrayList of QuakeEntry objects, each representing an earthquake with its own location.
+     @param distMax   The maximum distance (in kilometers) within which to find earthquakes from the specified location.
+     It defines the radius of interest, indicating, "I'm only interested in earthquakes that are
+     within this many kilometers from my specified location."
+      * @param from      The reference Location object from which the distance to each earthquake is calculated.
+     */
+    public List<QuakeEntry> filterByDistanceFrom(ArrayList<QuakeEntry> quakeData,
+                                                 double distMax, Location from) {
+        return quakeData.stream()
+                // Calculate the distance from 'from' to 'quakeEntry.getLocation()'
+                .filter(quakeEntry -> from.distanceTo(quakeEntry.getLocation()) < distMax)
+                .collect(Collectors.toCollection(ArrayList::new));
+    }
+
+
+
+
+
+
 }
