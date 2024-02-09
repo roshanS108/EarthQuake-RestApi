@@ -1,6 +1,4 @@
 package com.rest.earthquakeapi.XMLParsing;
-import com.rest.earthquakeapi.model.QuakeEntry;
-import org.springframework.util.FastByteArrayOutputStream;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -12,11 +10,9 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
 import java.io.StringReader;
-
 public class DateTimeParser implements ElementParser<String>{
     @Override
     public String parseElement(Element element) {
-
         //retrieving the dateTime from <summary> element
         NodeList dateTime = element.getElementsByTagName("summary");
         String date = "";
@@ -74,7 +70,5 @@ public class DateTimeParser implements ElementParser<String>{
         }
         //otherwise return null
         return null;
-
     }
-
 }
