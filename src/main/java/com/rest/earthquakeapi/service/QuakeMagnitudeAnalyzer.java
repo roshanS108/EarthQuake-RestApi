@@ -4,7 +4,6 @@ import com.rest.earthquakeapi.model.QuakeEntry;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
-
 @Service
 public class QuakeMagnitudeAnalyzer implements MagnitudeAnalysisService{
     @Override
@@ -32,14 +31,16 @@ public class QuakeMagnitudeAnalyzer implements MagnitudeAnalysisService{
         if(data == null || data.isEmpty()){
             return -1;
         }
-        int indexLargest = 0;
-        for(int i = 1; i<data.size(); i++){
-            QuakeEntry quakeEntry = data.get(i);
-            if(quakeEntry.getMagnitude() > data.get(indexLargest).getMagnitude()){
-                indexLargest = i;
+        double maxMagnitude = Integer.MIN_VALUE;
+        int maxIndex = -1;
+        for (int i = 0; i < data.size(); i++) {
+            double currMagnitude = data.get(i).getMagnitude();
+            if (currMagnitude > maxMagnitude) {
+                maxMagnitude = currMagnitude;
+                maxIndex = i;
             }
         }
-        return indexLargest;
+        return maxIndex;
     }
     /**
      * Finds and returns a list of the top 'howMany' largest magnitude earthquakes from the given list of quakes.
@@ -50,21 +51,17 @@ public class QuakeMagnitudeAnalyzer implements MagnitudeAnalysisService{
      * @param howMany   The number of top magnitude earthquakes to return.
      * @return An ArrayList of QuakeEntry containing the largest earthquakes, up to 'howMany', sorted by magnitude.
      */
-    public ArrayList<QuakeEntry> getLargest(ArrayList<QuakeEntry> quakeData, int howMany){
+    private ArrayList<QuakeEntry> getLargest(ArrayList<QuakeEntry> quakeData, int howMany) {
+        ArrayList<QuakeEntry> ret = new ArrayList<QuakeEntry>();
+        ArrayList<QuakeEntry> copy = new ArrayList<QuakeEntry>(quakeData);
 
-        //copy of quakeData
-        ArrayList<QuakeEntry> quakeDataCopy = new ArrayList<>(quakeData);
-
-        ArrayList<QuakeEntry> largestMagnitude = new ArrayList<>();
-
-        for(int i = 0; i<howMany && !quakeDataCopy.isEmpty(); i++){
-            int maxIndex = indexOfLargest(quakeData);
-            largestMagnitude.add(quakeDataCopy.get(maxIndex));
-            quakeData.remove(maxIndex);
-
+        for (int i = 0; i < howMany; i++) {
+            int maxIndex = indexOfLargest(copy);
+            ret.add(copy.get(maxIndex));
+            copy.remove(maxIndex);
         }
-        return largestMagnitude;
-    }
 
+        return ret;
+    }
 
 }
