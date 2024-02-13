@@ -122,13 +122,9 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuake
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list = parser.read(source);
 
-//        double minDepth = -10000.0;
-//        double maxDepth = -5000.0;
-
         List<QuakeEntry> filtersDepth = filterByDepth(list, minDepth, maxDepth);
 
         System.out.println("Find quakes with depth between " + minDepth + " and" + maxDepth);
-
         for (QuakeEntry quakeEntry : filtersDepth) {
             System.out.println(quakeEntry);
         }
@@ -136,6 +132,63 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuake
 
         return filtersDepth;
     }
+
+    @Override
+    public List<QuakeEntry> findClosestEarthQuakes(Location current, int howMany) {
+        EarthQuakeParser parser = new EarthQuakeParser();
+        String source = "data/nov20quakedatasmall.atom";
+//        String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        ArrayList<QuakeEntry> list  = parser.read(source);
+        System.out.println("read data for "+list.size());
+
+        ArrayList<QuakeEntry> closeQuakes = getClosest(list,current,howMany);
+        for(int k=0; k < closeQuakes.size(); k++){
+            QuakeEntry entry = closeQuakes.get(k);
+            double distanceInMeters = current.distanceTo(entry.getLocation());
+            System.out.printf("%4.2f\t %s\n", distanceInMeters/1000,entry);
+        }
+        return closeQuakes;
+    }
+
+    /**
+     * Finds and returns a list of the closest earthquakes to a given location.
+     * This method identifies the specified number of earthquakes (howMany) from a list of earthquake data (quakeData)
+     * that are closest to a given location (current).
+     * The earthquakes are sorted based on their proximity to the specified location, with the closest earthquake at index 0.
+
+     * Note: This method does not alter the original quakeData list.
+     * @param quakeData An ArrayList of QuakeEntry objects representing earthquake data.
+     * @param current   The Location object representing the location from which distances are measured.
+     * @param howMany   The maximum number of closest earthquakes to find. If this number is greater than
+     *                  the size of quakeData, all earthquakes from quakeData are included in the returned list.
+     * @return An ArrayList of QuakeEntry objects representing the closest earthquakes to the specified location,
+     *         sorted by ascending distance. The size of the returned list is the smaller of howMany or the size
+     *         of quakeData.
+     */
+    public ArrayList<QuakeEntry> getClosest(ArrayList<QuakeEntry> quakeData, Location current, int howMany) {
+        ArrayList<QuakeEntry> copy = new ArrayList<>(quakeData);
+        ArrayList<QuakeEntry> ret = new ArrayList<QuakeEntry>();
+
+        // Find the closest earthquakes up to 'howMany' times
+        for(int i = 0; i<howMany; i++) {
+
+            // Initialize minIndex to store the index of the closest earthquake in the copy ArrayList
+            int minIndex = 0;
+            for (int j = 1; j < copy.size(); j++) {
+                QuakeEntry quake = copy.get(j);
+                Location loc = quake.getLocation();
+
+                if (loc.distanceTo(current) < copy.get(minIndex)
+                        .getLocation().distanceTo(current)) {
+                    minIndex = j;
+                }
+            }
+            ret.add(copy.get(minIndex));
+            copy.remove(minIndex);
+        }
+        return ret;
+    }
+
     public List<QuakeEntry> filterByDepth(ArrayList<QuakeEntry> quakeData,
                                           double minDepth, double maxDepth) {
         return quakeData.stream()
