@@ -22,6 +22,8 @@ public interface EarthquakeDataProcessor {
 
     List<QuakeEntry> quakesOfDepth(double minDepth, double maxDepth);
 
+    List<QuakeEntry> findClosestEarthQuakes(Location current, int howMany);
+
 
 
 }
