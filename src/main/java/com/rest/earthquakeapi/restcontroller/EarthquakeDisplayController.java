@@ -45,10 +45,19 @@ public class EarthquakeDisplayController {
         }
     }
 
-
-
-
-
+    @GetMapping("/by-depth")
+    public ResponseEntity<List<QuakeEntry>> getEarthQuakesByDepth(
+            @RequestParam double minDepth,
+            @RequestParam double maxDepth){
+        System.out.println("min depth is : " + minDepth);
+        System.out.println("maxDepth is : " + maxDepth);
+        try {
+            List<QuakeEntry> nearEarthQuakes = earthquakeDataProcessor.quakesOfDepth(minDepth, maxDepth);
+            return ResponseEntity.ok(nearEarthQuakes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
 
