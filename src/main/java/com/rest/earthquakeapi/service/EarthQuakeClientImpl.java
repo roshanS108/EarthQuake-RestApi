@@ -112,6 +112,37 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuake
     }
 
     /**
+     * Prints details of all earthquakes from a specified data source whose depth is within a given range.
+     * The method reads earthquake data, filters it based on the depth criteria, and prints each qualifying earthquake.
+     * It also prints the total number of earthquakes found that match the depth criteria.
+     */
+    public List<QuakeEntry> quakesOfDepth(double minDepth, double maxDepth) {
+        EarthQuakeParser parser = new EarthQuakeParser();
+        //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        String source = "data/nov20quakedatasmall.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
+
+//        double minDepth = -10000.0;
+//        double maxDepth = -5000.0;
+
+        List<QuakeEntry> filtersDepth = filterByDepth(list, minDepth, maxDepth);
+
+        System.out.println("Find quakes with depth between " + minDepth + " and" + maxDepth);
+
+        for (QuakeEntry quakeEntry : filtersDepth) {
+            System.out.println(quakeEntry);
+        }
+        System.out.println("Found " + filtersDepth.size() + " quakes that match that criteria\n");
+
+        return filtersDepth;
+    }
+    public List<QuakeEntry> filterByDepth(ArrayList<QuakeEntry> quakeData,
+                                          double minDepth, double maxDepth) {
+        return quakeData.stream()
+                .filter(quakeEntry -> quakeEntry.getDepth() > minDepth && quakeEntry.getDepth() < maxDepth)
+                .collect(Collectors.toList());
+    }
+    /**
      * Filters and returns a list of earthquake entries (QuakeEntry) that are within a specified maximum distance
      * from a given location.
      *

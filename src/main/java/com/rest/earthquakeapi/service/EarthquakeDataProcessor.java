@@ -20,6 +20,8 @@ public interface EarthquakeDataProcessor {
     //gets all the earthquake that are less than @disMax from Location @from
     List<QuakeEntry> earthQuakesNearMe(double distMax, Location from);
 
+    List<QuakeEntry> quakesOfDepth(double minDepth, double maxDepth);
+
 
 
 }
