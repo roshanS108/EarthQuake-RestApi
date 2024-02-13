@@ -1,0 +1,24 @@
+2024-02-06 11:44:07,356 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 18561 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-02-06 11:44:07,366 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-02-06 11:44:07,367 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-02-06 11:44:08,628 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.705 seconds (process running for 2.503)
+2024-02-06 11:44:47,105 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 18847 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-02-06 11:44:47,105 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-02-06 11:44:47,106 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-02-06 11:44:48,228 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.683 seconds (process running for 2.422)
+2024-02-06 11:44:55,616 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Filtered earthquakes by magnitude greater than 5.0. Number of quakes: 3
+2024-02-06 11:44:55,618 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.5, Location: Location[null 26.379400,142.705500 acc=??? t=?!?], Info: 91km SSE of Chichi-shima, Japan
+2024-02-06 11:44:55,619 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -11.627000,165.516500 acc=??? t=?!?], Info: 106km SSW of Lata, Solomon Islands
+2024-02-06 11:44:55,619 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -24.666500,-175.932600 acc=??? t=?!?], Info: South of Tonga
+2024-02-06 11:44:55,619 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Number of earthquakes with magnitude greater than 5.0: 3
+2024-02-06 11:44:55,619 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Read data for 25 quakes
+2024-02-06 11:53:44,639 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 19939 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-02-06 11:53:44,640 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-02-06 11:53:44,641 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-02-06 11:53:45,637 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.363 seconds (process running for 2.164)
+2024-02-06 11:53:50,995 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Filtered earthquakes by magnitude greater than 5.0. Number of quakes: 3
+2024-02-06 11:53:50,996 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.5, Location: Location[null 26.379400,142.705500 acc=??? t=?!?], Info: 91km SSE of Chichi-shima, Japan
+2024-02-06 11:53:50,997 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -11.627000,165.516500 acc=??? t=?!?], Info: 106km SSW of Lata, Solomon Islands
+2024-02-06 11:53:50,997 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Magnitude: 5.1, Location: Location[null -24.666500,-175.932600 acc=??? t=?!?], Info: South of Tonga
+2024-02-06 11:53:50,997 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Number of earthquakes with magnitude greater than 5.0: 3
+2024-02-06 11:53:50,997 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-1] Read data for 25 quakes
