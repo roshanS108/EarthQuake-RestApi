@@ -2,6 +2,7 @@ package com.rest.earthquakeapi.restcontroller;
 import com.rest.earthquakeapi.apache.Location;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
+import com.rest.earthquakeapi.service.MagnitudeAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,13 @@ public class EarthquakeDisplayController {
 
     private EarthquakeDataProcessor earthquakeDataProcessor;
 
+    private MagnitudeAnalysisService magnitudeAnalysisService;
+
     @Autowired
-    public EarthquakeDisplayController(EarthquakeDataProcessor earthquakeDataProcessor){
+    public EarthquakeDisplayController(EarthquakeDataProcessor earthquakeDataProcessor, MagnitudeAnalysisService magnitudeAnalysisService){
+
         this.earthquakeDataProcessor = earthquakeDataProcessor;
+        this.magnitudeAnalysisService = magnitudeAnalysisService;
     }
     @GetMapping("/bigQuakes")
     public ResponseEntity<List<QuakeEntry>> getBigQuakes() {
@@ -75,7 +80,17 @@ public class EarthquakeDisplayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
+    @GetMapping("/largest-quakes")
+    public ResponseEntity<List<QuakeEntry>> getLargestQuakes(
+            @RequestParam int howMany){
+        System.out.println("how many is: " + howMany);
+        try {
+            List<QuakeEntry> nearEarthQuakes = magnitudeAnalysisService.findLargestEarthQuakes(howMany);
+            return ResponseEntity.ok(nearEarthQuakes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 
 
