@@ -59,6 +59,23 @@ public class EarthquakeDisplayController {
         }
     }
 
+    @GetMapping("/closest-quakes")
+    public ResponseEntity<List<QuakeEntry>> getClosestQuakes(
+            @RequestParam double latitude,
+            @RequestParam double longitude,
+            @RequestParam int howMany){
+        System.out.println("howMany is: " + howMany);
+        Location location = new Location(latitude, longitude);
+        System.out.println("location is: " + location);
+
+        try {
+            List<QuakeEntry> nearEarthQuakes = earthquakeDataProcessor.findClosestEarthQuakes(location, howMany);
+            return ResponseEntity.ok(nearEarthQuakes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 
 
 
