@@ -24,6 +24,9 @@ public interface EarthquakeDataProcessor {
 
     List<QuakeEntry> findClosestEarthQuakes(Location current, int howMany);
 
+    List<QuakeEntry> findEarthQuakesByPhrase(String phrase, String where);
+
+
 
 
 }
