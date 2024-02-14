@@ -20,7 +20,6 @@ public class EarthquakeDisplayController {
 
     @Autowired
     public EarthquakeDisplayController(EarthquakeDataProcessor earthquakeDataProcessor, MagnitudeAnalysisService magnitudeAnalysisService){
-
         this.earthquakeDataProcessor = earthquakeDataProcessor;
         this.magnitudeAnalysisService = magnitudeAnalysisService;
     }
@@ -80,6 +79,13 @@ public class EarthquakeDisplayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    /**
+     * Displays earthquake with the highest magnitude in earthquakes
+     * @param howMany specifies howMany largest-quakes it should return
+     * @return A list of largest quakes
+     */
+
     @GetMapping("/largest-quakes")
     public ResponseEntity<List<QuakeEntry>> getLargestQuakes(
             @RequestParam int howMany){
@@ -93,7 +99,6 @@ public class EarthquakeDisplayController {
     }
     /**
      * Finds earthquakes based on a specified phrase and its location in the earthquake's title.
-     *
      * @param phrase The phrase to search for in the title of each earthquake.
      * @param where Specifying where to search for the phrase in the title.
      *              It can be one of three values: "start", "end", or "any".
