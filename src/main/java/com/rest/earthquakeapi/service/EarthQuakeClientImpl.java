@@ -149,7 +149,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuake
         }
         return closeQuakes;
     }
-
     /**
      * Finds and returns a list of the closest earthquakes to a given location.
      * This method identifies the specified number of earthquakes (howMany) from a list of earthquake data (quakeData)
@@ -212,10 +211,63 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor, EarthQuake
                 .filter(quakeEntry -> from.distanceTo(quakeEntry.getLocation()) < distMax)
                 .collect(Collectors.toCollection(ArrayList::new));
     }
+    /**
+     * Filters a list of earthquake entries based on a specified phrase and its location in the earthquake's title.
+     * @param quakeData QuakeEntry objects, each representing an earthquake.
+     * @param where     Specifying where to search for the phrase in the title.
+     *                  It can be one of three values: "start", "end", or "any".
+     *                  "start" - The phrase must start the title.
+     *                  "end" - The phrase must end the title.
+     *                  "any" - The phrase can be anywhere in the title.
+     * @param phrase    The phrase to search for in the title of each earthquake.
+     * @return An ArrayList of QuakeEntry objects whose titles contain the specified phrase
+     * in the specified location. The returned list is empty if no earthquakes meet the criteria.
+     */
+    public static ArrayList<QuakeEntry> filterByPhrase(ArrayList<QuakeEntry> quakeData,
+                                                       String where, String phrase) {
+        ArrayList<QuakeEntry> answer = new ArrayList<>();
+
+        if(where.equals("start")) {
+            for (QuakeEntry qe: quakeData) {
+                if (qe.getInfo().startsWith(phrase)) {
+                    answer.add(qe);
+                }
+            }
+        }
+        else if (where.equals("any")) {
+            for (QuakeEntry qe: quakeData) {
+                if (qe.getInfo().contains(phrase)) {
+                    answer.add(qe);
+                }
+            }
+        }
+        else if (where.equals("end")) {
+            for (QuakeEntry qe: quakeData) {
+                if (qe.getInfo().endsWith(phrase)) {
+                    answer.add(qe);
+                }
+            }
+        }
+        return answer;
+    }
+    @Override
+    public List<QuakeEntry> findEarthQuakesByPhrase(String phrase, String where) {
+        EarthQuakeParser parser = new EarthQuakeParser();
+        //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        String source = "data/nov20quakedatasmall.atom";
+        ArrayList<QuakeEntry> list = parser.read(source);
 
 
+        // Use filterByPhrase to filter the earthquakes
+        ArrayList<QuakeEntry> filteredList = filterByPhrase(list, where, phrase);
 
-
-
+        // Iterate over the filtered list and print each quake
+        for (QuakeEntry quakeEntry : filteredList) {
+            System.out.println(quakeEntry);
+        }
+        // Print the number of earthquakes found
+        System.out.println("Found " + filteredList.size() + " quakes that match the criteria");
+        return filteredList;
+    }
 
 }
