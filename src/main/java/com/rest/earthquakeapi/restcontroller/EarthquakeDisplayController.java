@@ -98,7 +98,7 @@ public class EarthquakeDisplayController {
         }
     }
     /**
-     * Finds earthquakes based on a specified phrase and its location in the earthquake's title.
+     * Displays earthquakes based on a specified phrase and its location in the earthquake's title.
      * @param phrase The phrase to search for in the title of each earthquake.
      * @param where Specifying where to search for the phrase in the title.
      *              It can be one of three values: "start", "end", or "any".
