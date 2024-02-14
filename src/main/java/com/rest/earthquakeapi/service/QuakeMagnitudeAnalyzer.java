@@ -14,9 +14,6 @@ public class QuakeMagnitudeAnalyzer implements MagnitudeAnalysisService{
         ArrayList<QuakeEntry> list = parser.read(source);
 
         ArrayList<QuakeEntry> largestEarthQuake = getLargest(list, howMany);
-
-        largestEarthQuake.forEach(System.out::println);
-
         // Printing the total number of earthquakes
         System.out.println("Number of earthquakes read: " + list.size());
 
@@ -60,7 +57,6 @@ public class QuakeMagnitudeAnalyzer implements MagnitudeAnalysisService{
             ret.add(copy.get(maxIndex));
             copy.remove(maxIndex);
         }
-
         return ret;
     }
 
