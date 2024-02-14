@@ -91,7 +91,29 @@ public class EarthquakeDisplayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-
+    /**
+     * Finds earthquakes based on a specified phrase and its location in the earthquake's title.
+     *
+     * @param phrase The phrase to search for in the title of each earthquake.
+     * @param where Specifying where to search for the phrase in the title.
+     *              It can be one of three values: "start", "end", or "any".
+     *              "start" - The phrase must start the title.
+     *              "end" - The phrase must end the title.
+     *              "any" - The phrase can be anywhere in the title.
+     * @return A list of earthquakes that match the search criteria.
+     */
+    @GetMapping("/by-phrase")
+    public ResponseEntity<List<QuakeEntry>> findEarthquakesByPhrase(
+            @RequestParam("phrase") String phrase,
+            @RequestParam("where")String where){
+        System.out.println("phrase is: " + phrase);
+        System.out.println("where is: " + where);
+        try {
+            List<QuakeEntry> nearEarthQuakes = earthquakeDataProcessor.findEarthQuakesByPhrase(phrase, where);
+            return ResponseEntity.ok(nearEarthQuakes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }
