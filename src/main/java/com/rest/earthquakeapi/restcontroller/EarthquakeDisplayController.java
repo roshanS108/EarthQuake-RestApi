@@ -38,7 +38,7 @@ public class EarthquakeDisplayController {
      @param latitude The latitude of the location.
      @param longitude The longitude of the location.
      @return ResponseEntity containing a list of nearby earthquake entries.
-     @GetREquest URL: http://localhost:8080/earthquakes/nearby?distMax={distMax}&latitude={latitude}&longitude={longitude}
+     @GetREquest URL: 8080/earthquakes/nearby?distMax={distMax}&latitude={latitude}&longitude={longitude}
      */
     @GetMapping("/nearby")
     public ResponseEntity<List<QuakeEntry>> getNearByEarthQuakes(
@@ -57,8 +57,8 @@ public class EarthquakeDisplayController {
     }
 
     /**
-     Retrieves earthquake entries within a specified depth range.
-     @GetREquest URL: /earthquakes/by-depth?minDepth=-10000&maxDepth=-5000
+     * Retrieves earthquake entries within a specified depth range.
+     * @GetRequest URL: /earthquakes/by-depth?minDepth=-10000&maxDepth=-5000
      */
     @GetMapping("/by-depth")
     public ResponseEntity<List<QuakeEntry>> getEarthQuakesByDepth(
@@ -74,6 +74,14 @@ public class EarthquakeDisplayController {
         }
     }
 
+    /**
+     * Retrieves a list of earthquake entries closest to the specified location.
+     * @param latitude The latitude of the location.
+     * @param longitude The longitude of the location.
+     * @param howMany The number of closest earthquakes to retrieve.
+     * @return ResponseEntity containing a list of closest earthquake entries.
+     * @GetRequest Url: localhost:8080/earthquakes/closest-quakes?latitude=-6.211&longitude=106.845&howMany=3
+     */
     @GetMapping("/closest-quakes")
     public ResponseEntity<List<QuakeEntry>> getClosestQuakes(
             @RequestParam double latitude,
@@ -90,13 +98,12 @@ public class EarthquakeDisplayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
     /**
      * Displays earthquake with the highest magnitude in earthquakes
      * @param howMany specifies howMany largest-quakes it should return
      * @return A list of largest quakes
+     * @GetRequest URL: localhost:8080/earthquakes/largest-quakes?howMany=5
      */
-
     @GetMapping("/largest-quakes")
     public ResponseEntity<List<QuakeEntry>> getLargestQuakes(
             @RequestParam int howMany){
