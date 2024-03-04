@@ -86,18 +86,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
     /**
      * Finds and returns a list of earthquakes that occurred near a specified location.
-     * How it works:
-     * 1. It creates an instance of EarthQuakeParser to read earthquake data.
-     * 2. It specifies the source of the earthquake data. use a URL to fetch live data instead.)
-     * 3. It reads the earthquake data into a list of QuakeEntry objects.
-     * 4. It prints out the number of earthquakes read from the data source.
-     * 5. It filters the list of QuakeEntry objects to find those earthquakes that are within
-     *    a specified maximum distance ('distMax') from a 'from' location.
-     * 6. For each earthquake found within the specified distance, it prints out the distance
-     *    to the earthquake from a hard-coded location (in this case, Bridgeport, CA) and the
-     *    earthquake's information, --->soon making the location dynamic.
-     * 7. It prints out the total number of earthquakes found that match the criteria.
-     * 8. Finally, it returns the filtered list of close earthquakes.
      * Parameters:
      *  - distMax: The maximum distance (in kilometers) from the 'from' location to consider
      *             an earthquake as being "near".
@@ -134,7 +122,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
      *
      * @param quakeData An ArrayList of QuakeEntry objects, each representing an earthquake with its own location.
      @param distMax   The maximum distance (in kilometers) within which to find earthquakes from the specified location.
-     It defines the radius of interest, indicating, "I'm only interested in earthquakes that are
+     This method is basically asking, "I'm only interested in earthquakes that are
      within this many kilometers from my specified location."
       * @param from      The reference Location object from which the distance to each earthquake is calculated.
      */
@@ -148,7 +136,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 
     /**
      * Prints details of all earthquakes from a specified data source whose depth is within a given range.
-     * The method reads earthquake data, filters it based on the depth criteria, and prints each qualifying earthquake.
+     * The method reads earthquake data, filters it based on the depth criteria, and prints each earthquake that meets the criteria.
      * It also prints the total number of earthquakes found that match the depth criteria.
      */
     public List<QuakeEntry> quakesOfDepth(double minDepth, double maxDepth) {
