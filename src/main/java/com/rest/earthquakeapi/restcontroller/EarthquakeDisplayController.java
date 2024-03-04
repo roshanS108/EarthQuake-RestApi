@@ -56,6 +56,10 @@ public class EarthquakeDisplayController {
         }
     }
 
+    /**
+     Retrieves earthquake entries within a specified depth range.
+     @GetREquest URL: /earthquakes/by-depth?minDepth=-10000&maxDepth=-5000
+     */
     @GetMapping("/by-depth")
     public ResponseEntity<List<QuakeEntry>> getEarthQuakesByDepth(
             @RequestParam double minDepth,
