@@ -9,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
 @RestController
 @RequestMapping("/earthquakes")
 public class EarthquakeDisplayController {
@@ -33,6 +32,14 @@ public class EarthquakeDisplayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    /**
+     Retrieves a list of earthquake entries near a specified location within a maximum distance.
+     @param distMax The maximum distance within which earthquakes are searched. -->distMax = 1000000
+     @param latitude The latitude of the location.
+     @param longitude The longitude of the location.
+     @return ResponseEntity containing a list of nearby earthquake entries.
+     @GetREquest URL: http://localhost:8080/earthquakes/nearby?distMax={distMax}&latitude={latitude}&longitude={longitude}
+     */
     @GetMapping("/nearby")
     public ResponseEntity<List<QuakeEntry>> getNearByEarthQuakes(
                         @RequestParam double distMax,
