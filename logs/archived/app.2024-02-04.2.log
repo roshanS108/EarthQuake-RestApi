@@ -1,6 +1,0 @@
-2024-02-04 18:31:41,617 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-3] Filtered earthquakes by magnitude greater than 5.0. Number of quakes: 3
-2024-02-04 18:31:41,625 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-3] Magnitude: 5.5, Location: Location[null 26.379400,142.705500 acc=??? t=?!?], Info: 91km SSE of Chichi-shima, Japan
-2024-02-04 18:31:41,625 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-3] Magnitude: 5.1, Location: Location[null -11.627000,165.516500 acc=??? t=?!?], Info: 106km SSW of Lata, Solomon Islands
-2024-02-04 18:31:41,625 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-3] Magnitude: 5.1, Location: Location[null -24.666500,-175.932600 acc=??? t=?!?], Info: South of Tonga
-2024-02-04 18:31:41,625 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-3] Number of earthquakes with magnitude greater than 5.0: 3
-2024-02-04 18:31:41,625 INFO c.r.e.s.EarthQuakeClientImpl [http-nio-8080-exec-3] Read data for 25 quakes

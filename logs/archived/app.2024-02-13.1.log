@@ -1,0 +1,4 @@
+2024-02-13 18:30:57,407 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 21.0.1 with PID 20473 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-02-13 18:30:57,413 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-02-13 18:30:57,414 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-02-13 18:30:58,520 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.506 seconds (process running for 2.257)

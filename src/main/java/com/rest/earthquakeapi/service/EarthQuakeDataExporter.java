@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * IEarthquakeDataExporter interface defines methods for exporting or presenting processed earthquake data.
  */
 public interface EarthQuakeDataExporter {
-    void dumpCSV(ArrayList<QuakeEntry> list);
+
 
 
 
