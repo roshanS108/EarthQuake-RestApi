@@ -14,18 +14,10 @@ import java.util.stream.Collectors;
  * It currently utilizes the {@code EarthQuakeParser} class to read earthquake data from a specified source,
  * such as a file or a URL, and stores the data as a list of {@code QuakeEntry} objects. Each {@code QuakeEntry}
  * represents an individual earthquake event with details like location, magnitude, depth, and additional information.
- * <p>
  * Main functionalities include:
  * - Filtering earthquake data based on magnitude, depth, and distance criteria.
  * - Printing details of earthquakes that match specific filtering criteria.
  * - Generating a CSV file from the earthquake data for analysis and reporting.
- * <p>
- * <p>
- * Usage examples:
- * - Creating an instance of {@code EarthQuakeClient} and filtering earthquakes by depth:
- * <p>
- * <p>
-
  */
 @Service
 public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
@@ -135,7 +127,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
 
     /**
-     * Prints details of all earthquakes from a specified data source whose depth is within a given range.
+     * Prints details of all earthquakes from a data source whose depth is within a given range.
      * The method reads earthquake data, filters it based on the depth criteria, and prints each earthquake that meets the criteria.
      * It also prints the total number of earthquakes found that match the depth criteria.
      */
