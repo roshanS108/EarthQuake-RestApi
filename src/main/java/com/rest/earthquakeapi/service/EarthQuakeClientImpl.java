@@ -1,9 +1,7 @@
 package com.rest.earthquakeapi.service;
 import com.rest.earthquakeapi.ParserManager.EarthQuakeParser;
 import com.rest.earthquakeapi.apache.Location;
-import com.rest.earthquakeapi.filter.DepthFilter;
-import com.rest.earthquakeapi.filter.Filter;
-import com.rest.earthquakeapi.filter.MagnitudeFilter;
+import com.rest.earthquakeapi.filter.*;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -128,6 +126,34 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
                                               double maxDepth){
         return quakesWithFilter(minMagnitude, maxMagnitude, minDepth, maxDepth);
     }
+
+    @Override
+    public List<QuakeEntry> filterPossibleAllEarthquakeData(List<QuakeEntry> quakeData, Double minMagnitude, Double maxMagnitude,
+                                                            Double minDepth, Double maxDepth, Location location, Double maxDistance,
+                                                            String phrase, String locationName) {
+
+        EarthQuakeParser parser = new EarthQuakeParser();
+        String source = "data/nov20quakedatasmall.atom";
+        ArrayList<QuakeEntry> list  = parser.read(source);
+
+        System.out.println("read data for "+list.size()+" quakes");
+
+        MatchAllFilter maf = new MatchAllFilter();
+        maf.addFilter(new MagnitudeFilter(minMagnitude, maxMagnitude));
+        maf.addFilter(new DistanceFilter(new Location((Double) location.getLatitude(), location.getLongitude()), maxDistance));
+        maf.addFilter(new PhraseFilter(locationName, phrase));
+
+        ArrayList<QuakeEntry> result = filter(list, maf);
+
+        System.out.println("Match all filter 2 result:");
+
+        for (QuakeEntry qe : result) {
+            System.out.println(qe);
+        }
+
+        return result;
+    }
+
 
     /**
      * method for filtering the magnitude and depth
