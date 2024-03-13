@@ -112,7 +112,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
 
     public ArrayList<QuakeEntry> filter(ArrayList<QuakeEntry> quakeData, Filter f) {
-        System.out.println("this method name filter also gets called!!");
         ArrayList<QuakeEntry> answer = new ArrayList<>();
         for (QuakeEntry qe : quakeData) {
             if (f.satisfies(qe)) {
@@ -127,7 +126,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
                                               double maxMagnitude,
                                               double minDepth,
                                               double maxDepth){
-        System.out.println("this method does get called, yahooo!");
         return quakesWithFilter(minMagnitude, maxMagnitude, minDepth, maxDepth);
     }
 
@@ -139,9 +137,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
                                              double minDepth,
                                              double maxDepth){
 
-//        System.out.println("this method has been called-->quakes with filter");
-//        System.out.println("The min mag is: " + minMagnitude);
-//        System.out.println("the max mag is: "  + maxMagnitude);
+
         System.out.println("this method name quakesWithFilter also does get called, yahooo!");
 
         EarthQuakeParser parser = new EarthQuakeParser();
