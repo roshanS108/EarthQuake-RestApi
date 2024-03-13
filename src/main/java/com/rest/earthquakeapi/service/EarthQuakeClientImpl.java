@@ -128,9 +128,9 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
 
     @Override
-    public List<QuakeEntry> filterPossibleAllEarthquakeData(List<QuakeEntry> quakeData, Double minMagnitude, Double maxMagnitude,
-                                                            Double minDepth, Double maxDepth, Location location, Double maxDistance,
-                                                            String phrase, String locationName) {
+    public List<QuakeEntry> filterPossibleAllEarthquakeData(double minMagnitude, double maxMagnitude,
+                                                            double minDepth, double maxDepth, Location location, double maxDistance,
+                                                            String phrase, String where) {
 
         EarthQuakeParser parser = new EarthQuakeParser();
         String source = "data/nov20quakedatasmall.atom";
@@ -141,7 +141,8 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         MatchAllFilter maf = new MatchAllFilter();
         maf.addFilter(new MagnitudeFilter(minMagnitude, maxMagnitude));
         maf.addFilter(new DistanceFilter(new Location((Double) location.getLatitude(), location.getLongitude()), maxDistance));
-        maf.addFilter(new PhraseFilter(locationName, phrase));
+        maf.addFilter(new DepthFilter(minDepth,maxDepth));
+        maf.addFilter(new PhraseFilter(where, phrase));
 
         ArrayList<QuakeEntry> result = filter(list, maf);
 
