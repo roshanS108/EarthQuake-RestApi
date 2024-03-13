@@ -43,10 +43,10 @@ public class EarthquakeDisplayController {
      */
     @GetMapping("/filtered-quakes")
     public ResponseEntity<List<QuakeEntry>> getFilteredQuakes(
-            @RequestParam(required = false) Double minMagnitude,
-            @RequestParam(required = false) Double maxMagnitude,
-            @RequestParam(required = false) Double minDepth,
-            @RequestParam(required = false) Double maxDepth) {
+            @RequestParam double minMagnitude,
+            @RequestParam double maxMagnitude,
+            @RequestParam double minDepth,
+            @RequestParam double maxDepth) {
         try {
             List<QuakeEntry> largeQuakes = earthquakeDataProcessor.getFilteredQuakes(minMagnitude, maxMagnitude, minDepth, maxDepth);
             return ResponseEntity.ok(largeQuakes);
