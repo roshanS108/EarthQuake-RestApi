@@ -26,6 +26,8 @@ public interface EarthquakeDataProcessor {
 
     List<QuakeEntry> findEarthQuakesByPhrase(String phrase, String where);
 
+    List<QuakeEntry> getFilteredQuakes(double minMagnitude, double maxMagnitude, double minDepth, double maxDepth);
+
 
 
 
