@@ -10,14 +10,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * The {@code EarthQuakeClient} class provides methods to parse and process earthquake data.
+ * The {@code EarthQuakeClientImpl} class provides methods to parse and process earthquake data.
  * It currently utilizes the {@code EarthQuakeParser} class to read earthquake data from a specified source,
- * such as a file or a URL, and stores the data as a list of {@code QuakeEntry} objects. Each {@code QuakeEntry}
+ * such as URL, and stores the data as a list of {@code QuakeEntry} objects. Each {@code QuakeEntry}
  * represents an individual earthquake event with details like location, magnitude, depth, and additional information.
- * Main functionalities include:
- * - Filtering earthquake data based on magnitude, depth, and distance criteria.
- * - Printing details of earthquakes that match specific filtering criteria.
- * - Generating a CSV file from the earthquake data for analysis and reporting.
  */
 @Service
 public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
