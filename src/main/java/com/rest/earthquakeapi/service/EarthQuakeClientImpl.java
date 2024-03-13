@@ -112,6 +112,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
 
     public ArrayList<QuakeEntry> filter(ArrayList<QuakeEntry> quakeData, Filter f) {
+        System.out.println("this method name filter also gets called!!");
         ArrayList<QuakeEntry> answer = new ArrayList<>();
         for (QuakeEntry qe : quakeData) {
             if (f.satisfies(qe)) {
@@ -121,24 +122,52 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 
         return answer;
     }
+    @Override
+    public List<QuakeEntry> getFilteredQuakes(double minMagnitude,
+                                              double maxMagnitude,
+                                              double minDepth,
+                                              double maxDepth){
+        System.out.println("this method does get called, yahooo!");
+        return quakesWithFilter(minMagnitude, maxMagnitude, minDepth, maxDepth);
+    }
+
     /**
      * method for filtering the magnitude and depth
      */
-    public void quakesWithFilter(){
-        EarthQuakeParser parser = new EarthQuakeParser();
-        String source = "data/nov20quakedatasmall.atom";
+    public List<QuakeEntry> quakesWithFilter(double minMagnitude,
+                                             double maxMagnitude,
+                                             double minDepth,
+                                             double maxDepth){
 
+//        System.out.println("this method has been called-->quakes with filter");
+//        System.out.println("The min mag is: " + minMagnitude);
+//        System.out.println("the max mag is: "  + maxMagnitude);
+        System.out.println("this method name quakesWithFilter also does get called, yahooo!");
+
+        EarthQuakeParser parser = new EarthQuakeParser();
+//         String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
+        String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list = parser.read(source);
         System.out.println("read data for " + list.size() + " quakes");
 
         //Filtering magnitude data's
-        Filter magnitudefilter = new MagnitudeFilter(4.0, 5.0);
+        Filter magnitudefilter = new MagnitudeFilter(minMagnitude, maxMagnitude);
         ArrayList<QuakeEntry> filterByMagnitudeData = filter(list,magnitudefilter);
 
-        Filter depthFilter = new DepthFilter(-35000.0, -12000.0);
-        ArrayList<QuakeEntry> filterByDepthData = filter(list, depthFilter);
+        // Applying DepthFilter on the result of MagnitudeFilter
+        Filter depthFilter = new DepthFilter(minDepth, maxDepth);
+        ArrayList<QuakeEntry> result = filter(filterByMagnitudeData, depthFilter);
 
+        for (QuakeEntry qe : result) {
+            System.out.println(qe);
+        }
+        System.out.println("Result of Magnitude Filter and Depth Filter:");
+
+        System.out.println("Found " + result.size() + " quakes that match the criteria");
+        return result;
     }
+
+
 
     /**
      * Filters and returns a list of earthquake entries (QuakeEntry) that are within a specified maximum distance
@@ -298,5 +327,4 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         System.out.println("Found " + filteredList.size() + " quakes that match the criteria");
         return filteredList;
     }
-
 }
