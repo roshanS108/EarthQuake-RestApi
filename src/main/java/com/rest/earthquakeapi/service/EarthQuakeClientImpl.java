@@ -1,6 +1,9 @@
 package com.rest.earthquakeapi.service;
 import com.rest.earthquakeapi.ParserManager.EarthQuakeParser;
 import com.rest.earthquakeapi.apache.Location;
+import com.rest.earthquakeapi.filter.DepthFilter;
+import com.rest.earthquakeapi.filter.Filter;
+import com.rest.earthquakeapi.filter.MagnitudeFilter;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,13 +76,13 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         }
     }
     /**
-     * Finds and returns a list of earthquakes that occurred near a specified location.
+     * Finds and returns a list of earthquakes that happened near a specified location.
      * Parameters:
      *  - distMax: The maximum distance (in kilometers) from the 'from' location to consider
      *             an earthquake as being "near".
      *  - from: The location from which the distance to each earthquake is measured.
      * Returns:
-     *  - A list of QuakeEntry objects, each representing an earthquake that occurred within
+     *  - A list of QuakeEntry objects, each representing an earthquake that happened within
      *    the specified maximum distance from the 'from' location.
      */
     @Override
@@ -94,7 +97,10 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 //        Location city = new Location(35.988, -78.907);
 
         // This location is Bridgeport, CA
-        Location city = new Location(38.17, -118.82);
+        Location city = new Location((Double) from.getLatitude(), from.getLongitude());
+
+        System.out.println("the city longitude is: " + city.getLongitude()); //-->gives correct longitude based on user input
+
 
         List<QuakeEntry>closeEarthQuakes = filterByDistanceFrom(list, distMax, from);
         closeEarthQuakes.forEach(quakeEntry ->
@@ -104,6 +110,36 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 
         return closeEarthQuakes;
     }
+
+    public ArrayList<QuakeEntry> filter(ArrayList<QuakeEntry> quakeData, Filter f) {
+        ArrayList<QuakeEntry> answer = new ArrayList<>();
+        for (QuakeEntry qe : quakeData) {
+            if (f.satisfies(qe)) {
+                answer.add(qe);
+            }
+        }
+
+        return answer;
+    }
+    /**
+     * method for filtering the magnitude and depth
+     */
+    public void quakesWithFilter(){
+        EarthQuakeParser parser = new EarthQuakeParser();
+        String source = "data/nov20quakedatasmall.atom";
+
+        ArrayList<QuakeEntry> list = parser.read(source);
+        System.out.println("read data for " + list.size() + " quakes");
+
+        //Filtering magnitude data's
+        Filter magnitudefilter = new MagnitudeFilter(4.0, 5.0);
+        ArrayList<QuakeEntry> filterByMagnitudeData = filter(list,magnitudefilter);
+
+        Filter depthFilter = new DepthFilter(-35000.0, -12000.0);
+        ArrayList<QuakeEntry> filterByDepthData = filter(list, depthFilter);
+
+    }
+
     /**
      * Filters and returns a list of earthquake entries (QuakeEntry) that are within a specified maximum distance
      * from a given location.
@@ -205,16 +241,16 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         return ret;
     }
     /**
-     * Filters a list of earthquake entries based on a specified phrase and its location in the earthquake's title.
+     * Filters a list of earthquake data's based on a specified phrase and its location in the earthquake's title.
      * @param quakeData QuakeEntry objects, each representing an earthquake.
      * @param where     Specifying where to search for the phrase in the title.
      *                  It can be one of three values: "start", "end", or "any".
-     *                  "start" - The phrase must start the title.
+     *                  "start" - The phrase must start from the title.
      *                  "end" - The phrase must end the title.
      *                  "any" - The phrase can be anywhere in the title.
      * @param phrase    The phrase to search for in the title of each earthquake.
      * @return An ArrayList of QuakeEntry objects whose titles contain the specified phrase
-     * in the specified location. The returned list is empty if no earthquakes meet the criteria.
+     * in the specified location. The returned list is empty if no earthquakes are found.
      */
     public static ArrayList<QuakeEntry> filterByPhrase(ArrayList<QuakeEntry> quakeData,
                                                        String where, String phrase) {
