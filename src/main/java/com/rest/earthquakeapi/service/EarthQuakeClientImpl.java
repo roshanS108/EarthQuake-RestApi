@@ -136,10 +136,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
                                              double maxMagnitude,
                                              double minDepth,
                                              double maxDepth){
-
-
-        System.out.println("this method name quakesWithFilter also does get called, yahooo!");
-
         EarthQuakeParser parser = new EarthQuakeParser();
 //         String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         String source = "data/nov20quakedatasmall.atom";
