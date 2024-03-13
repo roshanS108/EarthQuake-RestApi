@@ -33,12 +33,37 @@ public class EarthquakeDisplayController {
         }
     }
     /**
+     * Filters earthquake data based on specified magnitude and depth ranges.
+     * @param minMagnitude The minimum magnitude of earthquakes to include.
+     * @param maxMagnitude The maximum magnitude of earthquakes to include.
+     * @param minDepth     The minimum depth of earthquakes to include.
+     * @param maxDepth     The maximum depth of earthquakes to include.
+     * @return A list of QuakeEntry objects representing earthquakes that match the specified criteria.
+     * @GetRequest URL: {{url}}/filtered-quakes?minMagnitude=4.0&maxMagnitude=5.0&minDepth=-35000.0&maxDepth=-12000.0
+     */
+    @GetMapping("/filtered-quakes")
+    public ResponseEntity<List<QuakeEntry>> getFilteredQuakes(
+            @RequestParam(required = false) Double minMagnitude,
+            @RequestParam(required = false) Double maxMagnitude,
+            @RequestParam(required = false) Double minDepth,
+            @RequestParam(required = false) Double maxDepth) {
+        try {
+            List<QuakeEntry> largeQuakes = earthquakeDataProcessor.getFilteredQuakes(minMagnitude, maxMagnitude, minDepth, maxDepth);
+            return ResponseEntity.ok(largeQuakes);
+        } catch (Exception e) {
+            // Log the exception and returning an appropriate response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    /**
      Retrieves a list of earthquake entries near a specified location within a maximum distance.
      @param distMax The maximum distance within which earthquakes are searched. -->distMax = 1000000
      @param latitude The latitude of the location.
      @param longitude The longitude of the location.
      @return ResponseEntity containing a list of nearby earthquake entries.
-     @GetREquest URL: 8080/earthquakes/nearby?distMax={distMax}&latitude={latitude}&longitude={longitude}
+     @GetRequest URL: {{url}}/earthquakes/nearby?distMax={distMax}&latitude={latitude}&longitude={longitude}
+     @Example URL: http://localhost:8080/earthquakes/nearby?distMax=1000000&latitude=38.17&longitude=-118.82
      */
     @GetMapping("/nearby")
     public ResponseEntity<List<QuakeEntry>> getNearByEarthQuakes(
@@ -58,7 +83,7 @@ public class EarthquakeDisplayController {
 
     /**
      * Retrieves earthquake entries within a specified depth range.
-     * @GetRequest URL: /earthquakes/by-depth?minDepth=-10000&maxDepth=-5000
+     * @GetRequest URL: {{url}}/earthquakes/by-depth?minDepth=-10000&maxDepth=-5000
      */
     @GetMapping("/by-depth")
     public ResponseEntity<List<QuakeEntry>> getEarthQuakesByDepth(
@@ -80,7 +105,7 @@ public class EarthquakeDisplayController {
      * @param longitude The longitude of the location.
      * @param howMany The number of closest earthquakes to retrieve.
      * @return ResponseEntity containing a list of closest earthquake entries.
-     * @GetRequest Url: localhost:8080/earthquakes/closest-quakes?latitude=-6.211&longitude=106.845&howMany=3
+     * @GetRequest Url: localhost:{{url}}/earthquakes/closest-quakes?latitude=-6.211&longitude=106.845&howMany=3
      */
     @GetMapping("/closest-quakes")
     public ResponseEntity<List<QuakeEntry>> getClosestQuakes(
@@ -102,7 +127,7 @@ public class EarthquakeDisplayController {
      * Displays earthquake with the highest magnitude in earthquakes
      * @param howMany specifies howMany largest-quakes it should return
      * @return A list of largest quakes
-     * @GetRequest URL: localhost:8080/earthquakes/largest-quakes?howMany=5
+     * @GetRequest URL: localhost:{{url}}/earthquakes/largest-quakes?howMany=5
      */
     @GetMapping("/largest-quakes")
     public ResponseEntity<List<QuakeEntry>> getLargestQuakes(
@@ -124,6 +149,8 @@ public class EarthquakeDisplayController {
      *              "end" - The phrase must end the title.
      *              "any" - The phrase can be anywhere in the title.
      * @return A list of earthquakes that match the search criteria.
+     * @GetUrlRequest: {{url}}/earthquakes/by-phrase?phrase={}&where={}
+     * @URLEXAMPLE: {{url}}/earthquakes/by-phrase?phrase=California&where=end
      */
     @GetMapping("/by-phrase")
     public ResponseEntity<List<QuakeEntry>> findEarthquakesByPhrase(
