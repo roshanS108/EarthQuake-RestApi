@@ -28,6 +28,10 @@ public interface EarthquakeDataProcessor {
 
     List<QuakeEntry> getFilteredQuakes(double minMagnitude, double maxMagnitude, double minDepth, double maxDepth);
 
+    List<QuakeEntry> filterPossibleAllEarthquakeData(double minMagnitude, double maxMagnitude,
+                                                     double minDepth, double maxDepth,
+                                                     Location location, double maxDistance, String phrase, String where);
+
 
 
 
