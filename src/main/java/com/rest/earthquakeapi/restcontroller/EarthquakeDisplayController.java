@@ -55,6 +55,41 @@ public class EarthquakeDisplayController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    /**
+     * Filters earthquake data based on specified magnitude and depth ranges.
+     * @param minMagnitude The minimum magnitude of earthquakes to include.
+     * @param maxMagnitude The maximum magnitude of earthquakes to include.
+     * @param minDepth     The minimum depth of earthquakes to include.
+     * @param maxDepth     The maximum depth of earthquakes to include.
+     * @return A list of QuakeEntry objects representing earthquakes that match the specified criteria.
+     * @GetRequest URL: {{url}}/earthquakes/filter?minMagnitude=3.0&maxMagnitude=6.0&minDepth=0.0&maxDepth=100.0&
+      latitude=37.7749&longitude=-122.4194&maxDistance=100.0&phrase=California&locationName=San+Francisco
+     *
+     */
+    @GetMapping("/filtered-quakes2")
+    public ResponseEntity<List<QuakeEntry>> getFilteredQuakes2(
+            @RequestParam double minMagnitude,
+            @RequestParam double maxMagnitude,
+            @RequestParam double minDepth,
+            @RequestParam double maxDepth,
+            @RequestParam double latitude,
+            @RequestParam double longitude,
+            @RequestParam double maxDistance,
+            @RequestParam(required = false) String phrase,
+            @RequestParam(required = false) String where) {
+
+        // Create Location object if latitude and longitude are provided by user
+        Location location = new Location(latitude, longitude);
+
+        try {
+            List<QuakeEntry> largeQuakes = earthquakeDataProcessor.filterPossibleAllEarthquakeData(minMagnitude, maxMagnitude, minDepth, maxDepth,
+                    location, maxDistance, phrase, where);
+            return ResponseEntity.ok(largeQuakes);
+        } catch (Exception e) {
+            // Log the exception and returning an appropriate response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     /**
      Retrieves a list of earthquake entries near a specified location within a maximum distance.
