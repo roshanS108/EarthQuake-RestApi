@@ -83,7 +83,7 @@ public class EarthquakeDisplayController {
 
        /* // default values for minDepth and maxDepth for handling null values
         if (minDepth == null) {
-            minDepth = 0.0; 
+            minDepth = 0.0;
         }
         if (maxDepth == null) {
             maxDepth = Double.MAX_VALUE;
