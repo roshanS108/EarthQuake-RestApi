@@ -28,9 +28,9 @@ public interface EarthquakeDataProcessor {
 
     List<QuakeEntry> getFilteredQuakes(double minMagnitude, double maxMagnitude, double minDepth, double maxDepth);
 
-    List<QuakeEntry> filterPossibleAllEarthquakeData(double minMagnitude, double maxMagnitude,
-                                                     double minDepth, double maxDepth,
-                                                     Location location, double maxDistance, String phrase, String where);
+    List<QuakeEntry> filterPossibleAllEarthquakeData(Double minMagnitude, Double maxMagnitude,
+                                                     Double minDepth, Double maxDepth,
+                                                     Location location, Double maxDistance, String phrase, String where);
 
 
 
