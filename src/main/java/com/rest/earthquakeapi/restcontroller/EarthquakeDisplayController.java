@@ -70,8 +70,8 @@ public class EarthquakeDisplayController {
     public ResponseEntity<List<QuakeEntry>> getFilteredQuakes2(
             @RequestParam(required = false) Double minMagnitude,
             @RequestParam(required = false) Double maxMagnitude,
-            @RequestParam(required = false) Double minDepth,
-            @RequestParam(required = false) Double maxDepth,
+            @RequestParam(required = false, defaultValue = "0.0") Double minDepth,
+            @RequestParam(required = false, defaultValue = "0.0") Double maxDepth,
             @RequestParam(required = false) Double latitude,
             @RequestParam(required = false) Double longitude,
             @RequestParam(required = false) Double maxDistance,
@@ -80,6 +80,14 @@ public class EarthquakeDisplayController {
 
         // Create Location object if latitude and longitude are provided by user
         Location location = new Location(latitude, longitude);
+
+       /* // default values for minDepth and maxDepth for handling null values
+        if (minDepth == null) {
+            minDepth = 0.0; 
+        }
+        if (maxDepth == null) {
+            maxDepth = Double.MAX_VALUE;
+        }*/
 
         try {
             List<QuakeEntry> largeQuakes = earthquakeDataProcessor.filterPossibleAllEarthquakeData(minMagnitude, maxMagnitude, minDepth, maxDepth,
