@@ -131,6 +131,16 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     public List<QuakeEntry> filterPossibleAllEarthquakeData(Double minMagnitude, Double maxMagnitude,
                                                             Double minDepth, Double maxDepth, Location location, Double maxDistance,
                                                             String phrase, String where) {
+        System.out.println("minMagnitude: " + minMagnitude);
+        System.out.println("maxMagnitude: " + maxMagnitude);
+        System.out.println("minDepth: " + minDepth);
+        System.out.println("maxDepth: " + maxDepth);
+        System.out.println("location: " + location);
+        System.out.println("maxDistance: " + maxDistance);
+        System.out.println("phrase: " + phrase);
+        System.out.println("where: " + where);
+
+
         EarthQuakeParser parser = new EarthQuakeParser();
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list  = parser.read(source);
@@ -152,6 +162,28 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         }
 
         return result;
+    }
+    public void testMatchAllFilter2() {
+        EarthQuakeParser parser = new EarthQuakeParser();
+        String source = "data/nov20quakedatasmall.atom";
+        ArrayList<QuakeEntry> list  = parser.read(source);
+
+        System.out.println("read data for "+list.size()+" quakes");
+
+        MatchAllFilter maf = new MatchAllFilter();
+        maf.addFilter(new MagnitudeFilter(0.0, 3.0));
+        maf.addFilter(new DistanceFilter(new Location(36.1314, -95.9372), 10000000));
+
+        maf.addFilter(new DepthFilter(0.0, 0.0));
+        maf.addFilter(new PhraseFilter("any", "California"));
+
+        ArrayList<QuakeEntry> result = filter(list, maf);
+
+        System.out.println("Match all filter 2 result:");
+
+        for (QuakeEntry qe : result) {
+            System.out.println(qe);
+        }
     }
 
     /**
@@ -343,5 +375,10 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         // Print the number of earthquakes found
         System.out.println("Found " + filteredList.size() + " quakes that match the criteria");
         return filteredList;
+    }
+
+    public static void main(String[] args) {
+        EarthQuakeClientImpl earthQuakeClient = new EarthQuakeClientImpl();
+        earthQuakeClient.testMatchAllFilter2();
     }
 }
