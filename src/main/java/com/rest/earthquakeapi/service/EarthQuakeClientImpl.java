@@ -128,10 +128,9 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
 
     @Override
-    public List<QuakeEntry> filterPossibleAllEarthquakeData(double minMagnitude, double maxMagnitude,
-                                                            double minDepth, double maxDepth, Location location, double maxDistance,
+    public List<QuakeEntry> filterPossibleAllEarthquakeData(Double minMagnitude, Double maxMagnitude,
+                                                            Double minDepth, Double maxDepth, Location location, Double maxDistance,
                                                             String phrase, String where) {
-
         EarthQuakeParser parser = new EarthQuakeParser();
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list  = parser.read(source);
@@ -154,7 +153,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 
         return result;
     }
-
 
     /**
      * method for filtering the magnitude and depth
