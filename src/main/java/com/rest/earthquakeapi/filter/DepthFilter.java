@@ -14,6 +14,9 @@ public class DepthFilter implements Filter{
     }
     @Override
     public boolean satisfies(QuakeEntry qe) {
+        if(minDepth == 0.0 || maxDepth==0.0){
+            return true;
+        }
         return qe.getDepth()>=minDepth && qe.getDepth()<=maxDepth;
     }
 }
