@@ -68,13 +68,13 @@ public class EarthquakeDisplayController {
      */
     @GetMapping("/filtered-quakes2")
     public ResponseEntity<List<QuakeEntry>> getFilteredQuakes2(
-            @RequestParam double minMagnitude,
-            @RequestParam double maxMagnitude,
-            @RequestParam double minDepth,
-            @RequestParam double maxDepth,
-            @RequestParam double latitude,
-            @RequestParam double longitude,
-            @RequestParam double maxDistance,
+            @RequestParam(required = false) Double minMagnitude,
+            @RequestParam(required = false) Double maxMagnitude,
+            @RequestParam(required = false) Double minDepth,
+            @RequestParam(required = false) Double maxDepth,
+            @RequestParam(required = false) Double latitude,
+            @RequestParam(required = false) Double longitude,
+            @RequestParam(required = false) Double maxDistance,
             @RequestParam(required = false) String phrase,
             @RequestParam(required = false) String where) {
 
