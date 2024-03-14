@@ -131,16 +131,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     public List<QuakeEntry> filterPossibleAllEarthquakeData(Double minMagnitude, Double maxMagnitude,
                                                             Double minDepth, Double maxDepth, Location location, Double maxDistance,
                                                             String phrase, String where) {
-        System.out.println("minMagnitude: " + minMagnitude);
-        System.out.println("maxMagnitude: " + maxMagnitude);
-        System.out.println("minDepth: " + minDepth);
-        System.out.println("maxDepth: " + maxDepth);
-        System.out.println("location: " + location);
-        System.out.println("maxDistance: " + maxDistance);
-        System.out.println("phrase: " + phrase);
-        System.out.println("where: " + where);
-
-
         EarthQuakeParser parser = new EarthQuakeParser();
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list  = parser.read(source);
@@ -192,9 +182,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         System.out.println("Found " + result.size() + " quakes that match the criteria");
         return result;
     }
-
-
-
     /**
      * Filters and returns a list of earthquake entries (QuakeEntry) that are within a specified maximum distance
      * from a given location.
@@ -354,7 +341,5 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         return filteredList;
     }
 
-    public static void main(String[] args) {
-        EarthQuakeClientImpl earthQuakeClient = new EarthQuakeClientImpl();
-    }
+
 }
