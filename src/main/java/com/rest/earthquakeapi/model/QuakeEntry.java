@@ -7,25 +7,9 @@ import java.time.format.DateTimeFormatter;
 /**
  * Represents a single earthquake entry.
  * This class encapsulates the basic characteristics of an earthquake, including its location, magnitude, depth, and a descriptive title.
- * The QuakeEntry class is immutable, meaning its state cannot change after construction.
- *
- * <p>Key Concepts:</p>
- * <ul>
- *     <li>POJO (Plain Old Java Object): Although QuakeEntry has behavior beyond just storing data, it is a simple representation of an earthquake's data.</li>
- *     <li>Immutable: Once a QuakeEntry is constructed, its data cannot be altered.</li>
- *     <li>Has-A Relationship: QuakeEntry has a Location object to represent the earthquake's geographical coordinates.</li>
- * </ul>
- *
- * <p>Usage:</p>
- * <ul>
- *     <li>Created when parsing earthquake data.</li>
  *     <li>Used to access specific information about an earthquake such as location, magnitude, etc.</li>
  *     <li>Supports comparison based on location for sorting and searching operations.</li>
- * </ul>
- *
- * @see Location
  */
-
 public class QuakeEntry implements Comparable<QuakeEntry>{
 
     private String id;
