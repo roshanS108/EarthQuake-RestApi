@@ -1,10 +1,15 @@
 package com.rest.earthquakeapi.restcontroller;
 import com.rest.earthquakeapi.apache.Location;
+import com.rest.earthquakeapi.exception.InvalidDoubleException;
+import com.rest.earthquakeapi.exception.InvalidTypeException;
+import com.rest.earthquakeapi.exception.QuakeDataErrorResponse;
+import com.rest.earthquakeapi.exception.QuakeDataNotFoundException;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
 import com.rest.earthquakeapi.service.MagnitudeAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,16 +59,27 @@ public class EarthquakeDisplayController {
             double maxMagnitudeValue = Double.parseDouble(maxMagnitude);
             double minDepthValue = Double.parseDouble(minDepth);
             double maxDepthValue = Double.parseDouble(maxDepth);
+            // Validate magnitude values
+            if (minMagnitudeValue < 0 || maxMagnitudeValue < 0) {
+                throw new QuakeDataNotFoundException("Earthquake data within the specified magnitude range (" + minMagnitudeValue + " - " + maxMagnitudeValue + ") was not found.");
+            }
             List<QuakeEntry> largeQuakes = earthquakeDataProcessor.getFilteredQuakes(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue);
             return ResponseEntity.ok(largeQuakes);
         } catch (NumberFormatException e) {
             // Handle invalid input (non-double values)
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values for magnitude and depth.");
-        } catch (Exception e) {
-            // Log the exception and return an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    // Exception handler to handle custom exception
+    @ExceptionHandler
+    public ResponseEntity<QuakeDataErrorResponse> handleException(QuakeDataNotFoundException exc) {
+        QuakeDataErrorResponse error = new QuakeDataErrorResponse();
+        error.setStatus(HttpStatus.NOT_FOUND.value());
+        error.setMessage(exc.getMessage());
+        error.setTimeStamp(String.valueOf(System.currentTimeMillis()));
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     /**
      * Filters earthquake data based on specified magnitude and depth ranges.
      * @param minMagnitude The minimum magnitude of earthquakes to include.
