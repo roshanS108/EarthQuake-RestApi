@@ -43,16 +43,24 @@ public class EarthquakeDisplayController {
      * @Testing Url: {{url}}/filtered-quakes?minMagnitude=4.0&maxMagnitude=5.0&minDepth=-35000.0&maxDepth=-12000.0
      */
     @GetMapping("/filtered-quakes")
-    public ResponseEntity<List<QuakeEntry>> getFilteredQuakes(
-            @RequestParam double minMagnitude,
-            @RequestParam double maxMagnitude,
-            @RequestParam double minDepth,
-            @RequestParam double maxDepth) {
+    public ResponseEntity<?> getFilteredQuakes(
+            @RequestParam String minMagnitude,
+            @RequestParam String maxMagnitude,
+            @RequestParam String minDepth,
+            @RequestParam String maxDepth) {
         try {
-            List<QuakeEntry> largeQuakes = earthquakeDataProcessor.getFilteredQuakes(minMagnitude, maxMagnitude, minDepth, maxDepth);
+            // Validate input parameters
+            double minMagnitudeValue = Double.parseDouble(minMagnitude);
+            double maxMagnitudeValue = Double.parseDouble(maxMagnitude);
+            double minDepthValue = Double.parseDouble(minDepth);
+            double maxDepthValue = Double.parseDouble(maxDepth);
+            List<QuakeEntry> largeQuakes = earthquakeDataProcessor.getFilteredQuakes(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue);
             return ResponseEntity.ok(largeQuakes);
+        } catch (NumberFormatException e) {
+            // Handle invalid input (non-double values)
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values for magnitude and depth.");
         } catch (Exception e) {
-            // Log the exception and returning an appropriate response
+            // Log the exception and return an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
