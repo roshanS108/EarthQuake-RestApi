@@ -1,5 +1,5 @@
 package com.rest.earthquakeapi.exception;
-public class QuakeDataErrorResponse extends RuntimeException{
+public class QuakeDataErrorResponse{
     private int status;
     private String message;
 
@@ -19,7 +19,6 @@ public class QuakeDataErrorResponse extends RuntimeException{
     public void setStatus(int status) {
         this.status = status;
     }
-    @Override
     public String getMessage() {
         return message;
     }
