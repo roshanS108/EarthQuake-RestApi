@@ -14,6 +14,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/earthquakes")
 public class EarthquakeDisplayController {
@@ -28,11 +30,20 @@ public class EarthquakeDisplayController {
         this.magnitudeAnalysisService = magnitudeAnalysisService;
     }
     @GetMapping("/bigQuakes")
-    public ResponseEntity<List<QuakeEntry>> getBigQuakes() {
+    public ResponseEntity<?> getBigQuakes() {
         try {
-            List<QuakeEntry> largeQuakes = earthquakeDataProcessor.bigQuakes();
-            return ResponseEntity.ok(largeQuakes);
-        } catch (Exception e) {
+            List<QuakeEntry> bigQuakesData = earthquakeDataProcessor.bigQuakes();
+            if (bigQuakesData.isEmpty()) {
+                // if list is empty inform the user that no earthquake data is found
+                String message = "No Earthquake data found.";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(bigQuakesData);
+         }
+            catch (NumberFormatException e) {
+                // handling invalid non-double values
+                return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
+            } catch (Exception e) {
             // Log the exception and returning an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -61,13 +72,22 @@ public class EarthquakeDisplayController {
             double maxDepthValue = Double.parseDouble(maxDepth);
             // Validate magnitude values
             if (minMagnitudeValue < 0 || maxMagnitudeValue < 0) {
-                throw new QuakeDataNotFoundException("Earthquake data within the specified magnitude range (" + minMagnitudeValue + " - " + maxMagnitudeValue + ") was not found.");
+                throw new QuakeDataNotFoundException("Earthquake data within the specified magnitude range (" + minMagnitudeValue + " - " + maxMagnitudeValue + ") was not found. Please put value that is greater than 0");
             }
-            List<QuakeEntry> largeQuakes = earthquakeDataProcessor.getFilteredQuakes(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue);
-            return ResponseEntity.ok(largeQuakes);
+            List<QuakeEntry> filteredQuakesData = earthquakeDataProcessor.getFilteredQuakes(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue);
+            if(filteredQuakesData.isEmpty()){
+                // if list is empty inform the user that no earthquake data is found
+                String message = "No Earthquake data found. Please consider putting valid value";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(filteredQuakesData);
         } catch (NumberFormatException e) {
-            // Handle invalid input (non-double values)
-            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values for magnitude and depth.");
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
+        }
+        catch (Exception e) {
+            // Log the exception and returning an appropriate response
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     // Exception handler to handle custom exception
@@ -92,7 +112,7 @@ public class EarthquakeDisplayController {
      *
      */
     @GetMapping("/filtered-quakes2")
-    public ResponseEntity<List<QuakeEntry>> getFilteredQuakes2(
+    public ResponseEntity<?> getFilteredQuakes2(
             @RequestParam(required = false) Double minMagnitude,
             @RequestParam(required = false) Double maxMagnitude,
             @RequestParam(required = false, defaultValue = "0.0") Double minDepth,
@@ -115,13 +135,24 @@ public class EarthquakeDisplayController {
         }*/
 
         try {
-            List<QuakeEntry> largeQuakes = earthquakeDataProcessor.filterPossibleAllEarthquakeData(minMagnitude, maxMagnitude, minDepth, maxDepth,
+            List<QuakeEntry> filteredQuakesData = earthquakeDataProcessor.filterPossibleAllEarthquakeData(minMagnitude, maxMagnitude, minDepth, maxDepth,
                     location, maxDistance, phrase, where);
-            return ResponseEntity.ok(largeQuakes);
-        } catch (Exception e) {
+            if(filteredQuakesData.isEmpty()){
+                // if list is empty inform the user that no earthquake data is found
+                String message = "No Earthquake data found. Please consider putting valid value";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(filteredQuakesData);
+        }
+        catch (NumberFormatException e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
+        }
+        catch (Exception e) {
             // Log the exception and returning an appropriate response
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
     }
 
     /**
@@ -134,16 +165,29 @@ public class EarthquakeDisplayController {
      @Testing URL: http://localhost:8080/earthquakes/nearby?distMax=1000000&latitude=38.17&longitude=-118.82
      */
     @GetMapping("/nearby")
-    public ResponseEntity<List<QuakeEntry>> getNearByEarthQuakes(
+    public ResponseEntity<?> getNearByEarthQuakes(
                         @RequestParam double distMax,
                         @RequestParam double latitude,
                         @RequestParam double longitude){
         System.out.println("dist max is: " + distMax);
         Location location = new Location(latitude, longitude);
         System.out.println("location is: " + location);
+        // Validate magnitude values
+        if (distMax < 0) {
+            throw new QuakeDataNotFoundException("Earthquake data within the specified magnitude range (" + distMax + " - "  + ") was not found. Please put value that is greater than 0");
+        }
         try {
-            List<QuakeEntry> nearEarthQuakes = earthquakeDataProcessor.earthQuakesNearMe(distMax, location);
-            return ResponseEntity.ok(nearEarthQuakes);
+            List<QuakeEntry> nearEarthQuakesData = earthquakeDataProcessor.earthQuakesNearMe(distMax, location);
+            if (nearEarthQuakesData.isEmpty()) {
+                // if list is empty inform the user that no earthquake data is found
+                String message = "No earthquake data found.";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(nearEarthQuakesData);
+
+        } catch (NumberFormatException e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -155,14 +199,23 @@ public class EarthquakeDisplayController {
      * @Testing Url: {{url}}/earthquakes/by-depth?minDepth=-10000&maxDepth=-5000
      */
     @GetMapping("/by-depth")
-    public ResponseEntity<List<QuakeEntry>> getEarthQuakesByDepth(
+    public ResponseEntity<?> getEarthQuakesByDepth(
             @RequestParam double minDepth,
-            @RequestParam double maxDepth){
+            @RequestParam double maxDepth) {
         System.out.println("min depth is : " + minDepth);
         System.out.println("maxDepth is : " + maxDepth);
         try {
-            List<QuakeEntry> nearEarthQuakes = earthquakeDataProcessor.quakesOfDepth(minDepth, maxDepth);
-            return ResponseEntity.ok(nearEarthQuakes);
+            List<QuakeEntry> earthQuakesDepthData = earthquakeDataProcessor.quakesOfDepth(minDepth, maxDepth);
+
+            if (earthQuakesDepthData.isEmpty()) {
+                // if list is empty inform the user that no earthquake data is found
+                String message = "No earthquake data found for depth range: " + minDepth + "," + maxDepth + " Please consider putting valid value.";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(earthQuakesDepthData);
+        } catch (NumberFormatException e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -178,7 +231,7 @@ public class EarthquakeDisplayController {
      * @Testing Url: {url}}/earthquakes/closest-quakes?latitude=-6.211&longitude=106.845&howMany=3
      */
     @GetMapping("/closest-quakes")
-    public ResponseEntity<List<QuakeEntry>> getClosestQuakes(
+    public ResponseEntity<?> getClosestQuakes(
             @RequestParam double latitude,
             @RequestParam double longitude,
             @RequestParam int howMany){
@@ -187,8 +240,16 @@ public class EarthquakeDisplayController {
         System.out.println("location is: " + location);
 
         try {
-            List<QuakeEntry> nearEarthQuakes = earthquakeDataProcessor.findClosestEarthQuakes(location, howMany);
-            return ResponseEntity.ok(nearEarthQuakes);
+            List<QuakeEntry> nearEarthQuakesData = earthquakeDataProcessor.findClosestEarthQuakes(location, howMany);
+            if(nearEarthQuakesData.isEmpty()){
+                // if list is empty inform the user that no earthquake data is found
+                String message = "No earthquake data found. Please consider putting valid value.";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(nearEarthQuakesData);
+        } catch (NumberFormatException e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -201,12 +262,21 @@ public class EarthquakeDisplayController {
      * @Testing Url: {{url}}/earthquakes/largest-quakes?howMany=5
      */
     @GetMapping("/largest-quakes")
-    public ResponseEntity<List<QuakeEntry>> getLargestQuakes(
+    public ResponseEntity<?> getLargestQuakes(
             @RequestParam int howMany){
         System.out.println("how many is: " + howMany);
         try {
-            List<QuakeEntry> nearEarthQuakes = magnitudeAnalysisService.findLargestEarthQuakes(howMany);
-            return ResponseEntity.ok(nearEarthQuakes);
+            List<QuakeEntry> largestEarthQuakesData = magnitudeAnalysisService.findLargestEarthQuakes(howMany);
+            if (largestEarthQuakesData.isEmpty()) {
+                // if list is empty inform the user that no earthquake data is found
+                String message = "No earthquake data found";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(largestEarthQuakesData);
+
+        }catch (NumberFormatException e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -224,17 +294,27 @@ public class EarthquakeDisplayController {
      * @Testing Url: {{url}}/earthquakes/by-phrase?phrase=California&where=end
      */
     @GetMapping("/by-phrase")
-    public ResponseEntity<List<QuakeEntry>> findEarthquakesByPhrase(
+    public ResponseEntity<?> findEarthquakesByPhrase(
             @RequestParam("phrase") String phrase,
             @RequestParam("where")String where){
         System.out.println("phrase is: " + phrase);
         System.out.println("where is: " + where);
         try {
-            List<QuakeEntry> nearEarthQuakes = earthquakeDataProcessor.findEarthQuakesByPhrase(phrase, where);
-            return ResponseEntity.ok(nearEarthQuakes);
+            List<QuakeEntry> earthQuakesByPhraseData = earthquakeDataProcessor.findEarthQuakesByPhrase(phrase, where);
+
+            // if list is empty inform the user that no earthquake data is found
+            if (earthQuakesByPhraseData.isEmpty()) {
+                String message = "No earthquake data found";
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+            }
+            return ResponseEntity.ok(earthQuakesByPhraseData);
+        }catch (NumberFormatException e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+
     }
 
 }
