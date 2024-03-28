@@ -72,7 +72,11 @@ public class EarthquakeDisplayController {
             double minDepthValue = Double.parseDouble(minDepth);
             double maxDepthValue = Double.parseDouble(maxDepth);
 
-
+            // checking if any of the required parameters are missing
+            if(minMagnitudeValue == 0.0 || maxMagnitudeValue == 0.0){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse("All parameter values are required. " +
+                        "Please provide values for minMagnitude, maxMagnitude, minDepth, and maxDepth."));
+            }
             // validating magnitude values
             if (minMagnitudeValue <=0 || maxMagnitudeValue <= 0) {
                 String message = "No earthquake data was found within the specified magnitude range ("
@@ -141,7 +145,10 @@ public class EarthquakeDisplayController {
             // Create Location object if latitude and longitude are provided by user
             Location location = new Location(latitudeValue, longitudeValue);
 
-
+            // checking if any of the required parameters are missing
+            if(minMagnitudeValue == 0.0 || maxMagnitudeValue == 0.0 || minDepthValue == 0.0 || maxDepthValue == 0.0){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse("Minimum magnitude, maximum magnitude, minimum depth, and maximum depth parameters are required."));
+            }
             // validating magnitude values
             if (minMagnitudeValue <=0 || maxMagnitudeValue <= 0) {
                 throw new QuakeDataNotFoundException("Earthquake data within the specified magnitude range (" + minMagnitudeValue + " - " + maxMagnitudeValue + ") was not found. Please consider putting value that is greater than 0");
@@ -196,7 +203,11 @@ public class EarthquakeDisplayController {
             double longitudeValue = Double.parseDouble(longitude);
 
 
-
+            // checking if any of the required parameters are missing
+            if(distMaxValue == 0.0 || latitudeValue == 0.0 || longitudeValue == 0.0){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse("Distance, Latitude, and Longitude value are required."));
+            }
+            // checking if any of the required parameters are missing
             if(latitudeValue < -90 || latitudeValue > 90){
                 String message = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(message));
@@ -236,11 +247,14 @@ public class EarthquakeDisplayController {
             @RequestParam String maxDepth) {
         System.out.println("min depth is : " + minDepth);
         System.out.println("maxDepth is : " + maxDepth);
-
         try {
             double minDepthValue = Double.parseDouble(minDepth);
             double maxDepthValue = Double.parseDouble(maxDepth);
 
+            // checking if any of the required parameters are missing
+            if(minDepthValue == 0.0 || maxDepthValue == 0.0){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("minDepth and maxDepth value are required.");
+            }
             List<QuakeEntry> earthQuakesDepthData = earthquakeDataProcessor.quakesOfDepth(minDepthValue, maxDepthValue);
             // if list is empty inform the user that no earthquake data is found
             if (earthQuakesDepthData.isEmpty()) {
@@ -273,6 +287,11 @@ public class EarthquakeDisplayController {
             double latitudeValue = Double.parseDouble(latitude);
             double longitudeValue = Double.parseDouble(longitude);
 
+            // checking if any of the required parameters are missing
+            if (latitudeValue == 0.0 || longitudeValue == 0.0 || howMany == 0) {
+                String errorMessage = "All parameter values are required. Please provide values for latitude, longitude, and howMany.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(errorMessage));
+            }
 
             System.out.println("howMany is: " + howMany);
             Location location = new Location(latitudeValue, latitudeValue);
