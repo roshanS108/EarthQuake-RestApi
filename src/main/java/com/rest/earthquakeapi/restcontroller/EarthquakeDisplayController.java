@@ -37,17 +37,14 @@ public class EarthquakeDisplayController {
             // if list is empty inform the user that no earthquake data is found
             if (bigQuakesData.isEmpty()) {
                 String message = "No Earthquake data found.";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             return ResponseEntity.ok(bigQuakesData);
          }
             catch (NumberFormatException e) {
                 // handling invalid non-double values
                 return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
-            } catch (Exception e) {
-            // Log the exception and returning an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+            }
     }
     /**
      * Filters earthquake data based on specified magnitude and depth ranges.
@@ -74,31 +71,27 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(minMagnitudeValue == 0.0 || maxMagnitudeValue == 0.0){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse("All parameter values are required. " +
-                        "Please provide values for minMagnitude, maxMagnitude, minDepth, and maxDepth."));
+                String message = "All parameter values are required. Please provide values for minMagnitude, maxMagnitude, minDepth, and maxDepth.";
+                throw new QuakeDataNotFoundException(message);
             }
             // validating magnitude values
             if (minMagnitudeValue <=0 || maxMagnitudeValue <= 0) {
                 String message = "No earthquake data was found within the specified magnitude range ("
                         + minMagnitudeValue + " - " + maxMagnitudeValue
                         + "). Please ensure the range values are greater than 0.";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             List<QuakeEntry> filteredQuakesData = earthquakeDataProcessor.getFilteredQuakes(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue);
 
             // if list is empty inform the user that no earthquake data is found
             if(filteredQuakesData.isEmpty()){
                 String message = "No Earthquake data found. Please consider putting valid value";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             return ResponseEntity.ok(filteredQuakesData);
         } catch (NumberFormatException e) {
             // handling invalid non-double values
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
-        }
-        catch (Exception e) {
-            // Log the exception and returning an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     // Exception handler to handle custom exception
@@ -147,7 +140,8 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(minMagnitudeValue == 0.0 || maxMagnitudeValue == 0.0 || minDepthValue == 0.0 || maxDepthValue == 0.0){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse("Minimum magnitude, maximum magnitude, minimum depth, and maximum depth parameters are required."));
+                String message = "Minimum magnitude, maximum magnitude, minimum depth, and maximum depth parameters are required.";
+                throw new QuakeDataNotFoundException(message);
             }
             // validating magnitude values
             if (minMagnitudeValue <=0 || maxMagnitudeValue <= 0) {
@@ -155,22 +149,22 @@ public class EarthquakeDisplayController {
             }
             if(maxMagnitudeValue >= 10){
                 String message = "No earthquakes with a magnitude of 10 or higher were found. Please try using a smaller magnitude value.";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             if(latitudeValue < -90 || latitudeValue > 90){
                 String message = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             if(longitudeValue < -180 || longitudeValue > 180){
                 String message = "Invalid longitude value. Longitude value must be between -180 and and 180 degrees.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             List<QuakeEntry> filteredQuakesData = earthquakeDataProcessor.filterPossibleAllEarthquakeData(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue,
                     location, maxDistanceValue, phrase, where);
             // if list is empty inform the user that no earthquake data is found
             if(filteredQuakesData.isEmpty()){
                 String message = "No Earthquake data found. Please consider putting valid value";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             return ResponseEntity.ok(filteredQuakesData);
         }
@@ -178,10 +172,7 @@ public class EarthquakeDisplayController {
             // handling invalid non-double values
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         }
-        catch (Exception e) {
-            // Log the exception and returning an appropriate response
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
+
     }
     /**
      Retrieves a list of earthquake entries near a specified location within a maximum distance.
@@ -205,16 +196,17 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(distMaxValue == 0.0 || latitudeValue == 0.0 || longitudeValue == 0.0){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse("Distance, Latitude, and Longitude value are required."));
+                String message = "Distance, Latitude, and Longitude value are required.";
+                throw new QuakeDataNotFoundException(message);
             }
             // checking if any of the required parameters are missing
             if(latitudeValue < -90 || latitudeValue > 90){
                 String message = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             if(longitudeValue < -180 || longitudeValue > 180){
                 String message = "Invalid longitude value. Longitude value must be between -180 and and 180 degrees.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             Location location = new Location(latitudeValue, longitudeValue);
             System.out.println("location is: " + location);
@@ -226,14 +218,12 @@ public class EarthquakeDisplayController {
             // if list is empty inform the user that no earthquake data is found
             if (nearEarthQuakesData.isEmpty()) {
                 String message = "No earthquake data found. Hint: Please consider providing valid values.";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             return ResponseEntity.ok(nearEarthQuakesData);
         } catch (NumberFormatException e) {
             // handling invalid non-double values
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     /**
@@ -253,20 +243,19 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(minDepthValue == 0.0 || maxDepthValue == 0.0){
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("minDepth and maxDepth value are required.");
+                String message = "minDepth and maxDepth value are required.";
+                throw new QuakeDataNotFoundException(message);
             }
             List<QuakeEntry> earthQuakesDepthData = earthquakeDataProcessor.quakesOfDepth(minDepthValue, maxDepthValue);
             // if list is empty inform the user that no earthquake data is found
             if (earthQuakesDepthData.isEmpty()) {
                 String message = "No earthquake data found for depth range: " + minDepth + "," + maxDepth + " Please consider providing valid values.";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                throw new QuakeDataNotFoundException(message);
             }
             return ResponseEntity.ok(earthQuakesDepthData);
         } catch (NumberFormatException e) {
             // handling invalid non-double values
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     /**
@@ -290,7 +279,7 @@ public class EarthquakeDisplayController {
             // checking if any of the required parameters are missing
             if (latitudeValue == 0.0 || longitudeValue == 0.0 || howMany == 0) {
                 String errorMessage = "All parameter values are required. Please provide values for latitude, longitude, and howMany.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(errorMessage));
+                throw new QuakeDataNotFoundException(errorMessage);
             }
 
             System.out.println("howMany is: " + howMany);
@@ -298,25 +287,23 @@ public class EarthquakeDisplayController {
             System.out.println("location is: " + location);
 
             if(latitudeValue < -90 || latitudeValue > 90){
-                String message = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(message));
+                String errorMessage = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(errorMessage));
             }
             if(longitudeValue < -180 || longitudeValue > 180){
-                String message = "Invalid longitude value. Longitude value must be between -180 and and 180 degrees.";
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new QuakeDataErrorResponse(message));
+                String errorMessage = "Invalid longitude value. Longitude value must be between -180 and and 180 degrees.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             List<QuakeEntry> nearEarthQuakesData = earthquakeDataProcessor.findClosestEarthQuakes(location, howMany);
             // if list is empty inform the user that no earthquake data is found
             if(nearEarthQuakesData.isEmpty()){
-                String message = "No earthquake data found. Hint: Please consider providing valid values.";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                String errorMessage = "No earthquake data found. Hint: Please consider providing valid values.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(nearEarthQuakesData);
         } catch (NumberFormatException e) {
             // handling invalid non-double values
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     /**
@@ -338,16 +325,14 @@ public class EarthquakeDisplayController {
             List<QuakeEntry> largestEarthQuakesData = magnitudeAnalysisService.findLargestEarthQuakes(howMany);
             // if list is empty inform the user that no earthquake data is found
             if (largestEarthQuakesData.isEmpty()) {
-                String message = "No earthquake data found";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                String errorMessage = "No earthquake data found";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(largestEarthQuakesData);
 
         }catch (NumberFormatException e) {
             // handling invalid non-double values
             return ResponseEntity.badRequest().body("Parameter 'howMany' must be a valid integer.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
     /**
@@ -373,15 +358,13 @@ public class EarthquakeDisplayController {
 
             // if list is empty inform the user that no earthquake data is found
             if (earthQuakesByPhraseData.isEmpty()) {
-                String message = "No earthquake data found";
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new QuakeDataErrorResponse(message));
+                String errorMessage = "No earthquake data found";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(earthQuakesByPhraseData);
         }catch (NumberFormatException e) {
             // handling invalid non-double values
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 }
