@@ -8,6 +8,10 @@ public class QuakeDataErrorResponse{
     public QuakeDataErrorResponse(){
 
     }
+
+    public QuakeDataErrorResponse(String message){
+        this.message = message;
+    }
     public QuakeDataErrorResponse(int status, String message, String timeStamp) {
         this.status = status;
         this.message = message;
