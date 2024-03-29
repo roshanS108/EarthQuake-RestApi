@@ -36,8 +36,8 @@ public class EarthquakeDisplayController {
             List<QuakeEntry> bigQuakesData = earthquakeDataProcessor.bigQuakes();
             // if list is empty inform the user that no earthquake data is found
             if (bigQuakesData.isEmpty()) {
-                String message = "No Earthquake data found.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "No Earthquake data found.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(bigQuakesData);
          }
@@ -71,22 +71,22 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(minMagnitudeValue == 0.0 || maxMagnitudeValue == 0.0){
-                String message = "All parameter values are required. Please provide values for minMagnitude, maxMagnitude, minDepth, and maxDepth.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "All parameter values are required. Please provide values for minMagnitude, maxMagnitude, minDepth, and maxDepth.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             // validating magnitude values
             if (minMagnitudeValue <=0 || maxMagnitudeValue <= 0) {
-                String message = "No earthquake data was found within the specified magnitude range ("
+                String errorMessage = "No earthquake data was found within the specified magnitude range ("
                         + minMagnitudeValue + " - " + maxMagnitudeValue
                         + "). Please ensure the range values are greater than 0.";
-                throw new QuakeDataNotFoundException(message);
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             List<QuakeEntry> filteredQuakesData = earthquakeDataProcessor.getFilteredQuakes(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue);
 
             // if list is empty inform the user that no earthquake data is found
             if(filteredQuakesData.isEmpty()){
-                String message = "No Earthquake data found. Please consider putting valid value";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "No Earthquake data found. Please consider putting valid value";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(filteredQuakesData);
         } catch (NumberFormatException e) {
@@ -140,16 +140,16 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(minMagnitudeValue == 0.0 || maxMagnitudeValue == 0.0 || minDepthValue == 0.0 || maxDepthValue == 0.0){
-                String message = "Minimum magnitude, maximum magnitude, minimum depth, and maximum depth parameters are required.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "Minimum magnitude, maximum magnitude, minimum depth, and maximum depth parameters are required.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             // validating magnitude values
             if (minMagnitudeValue <=0 || maxMagnitudeValue <= 0) {
                 throw new QuakeDataNotFoundException("Earthquake data within the specified magnitude range (" + minMagnitudeValue + " - " + maxMagnitudeValue + ") was not found. Please consider putting value that is greater than 0");
             }
             if(maxMagnitudeValue >= 10){
-                String message = "No earthquakes with a magnitude of 10 or higher were found. Please try using a smaller magnitude value.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "No earthquakes with a magnitude of 10 or higher were found. Please try using a smaller magnitude value.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             if(latitudeValue < -90 || latitudeValue > 90){
                 String message = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
@@ -163,8 +163,8 @@ public class EarthquakeDisplayController {
                     location, maxDistanceValue, phrase, where);
             // if list is empty inform the user that no earthquake data is found
             if(filteredQuakesData.isEmpty()){
-                String message = "No Earthquake data found. Please consider putting valid value";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "No Earthquake data found. Please consider putting valid value";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(filteredQuakesData);
         }
@@ -196,17 +196,17 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(distMaxValue == 0.0 || latitudeValue == 0.0 || longitudeValue == 0.0){
-                String message = "Distance, Latitude, and Longitude value are required.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "Distance, Latitude, and Longitude value are required.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             // checking if any of the required parameters are missing
             if(latitudeValue < -90 || latitudeValue > 90){
-                String message = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "Invalid latitude value. Latitude value must be between -90 and and 90 degrees.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             if(longitudeValue < -180 || longitudeValue > 180){
-                String message = "Invalid longitude value. Longitude value must be between -180 and and 180 degrees.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "Invalid longitude value. Longitude value must be between -180 and and 180 degrees.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             Location location = new Location(latitudeValue, longitudeValue);
             System.out.println("location is: " + location);
@@ -217,8 +217,8 @@ public class EarthquakeDisplayController {
             List<QuakeEntry> nearEarthQuakesData = earthquakeDataProcessor.earthQuakesNearMe(distMaxValue, location);
             // if list is empty inform the user that no earthquake data is found
             if (nearEarthQuakesData.isEmpty()) {
-                String message = "No earthquake data found. Hint: Please consider providing valid values.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "No earthquake data found. Hint: Please consider providing valid values.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(nearEarthQuakesData);
         } catch (NumberFormatException e) {
@@ -243,14 +243,14 @@ public class EarthquakeDisplayController {
 
             // checking if any of the required parameters are missing
             if(minDepthValue == 0.0 || maxDepthValue == 0.0){
-                String message = "minDepth and maxDepth value are required.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "minDepth and maxDepth value are required.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             List<QuakeEntry> earthQuakesDepthData = earthquakeDataProcessor.quakesOfDepth(minDepthValue, maxDepthValue);
             // if list is empty inform the user that no earthquake data is found
             if (earthQuakesDepthData.isEmpty()) {
-                String message = "No earthquake data found for depth range: " + minDepth + "," + maxDepth + " Please consider providing valid values.";
-                throw new QuakeDataNotFoundException(message);
+                String errorMessage = "No earthquake data found for depth range: " + minDepth + "," + maxDepth + " Please consider providing valid values.";
+                throw new QuakeDataNotFoundException(errorMessage);
             }
             return ResponseEntity.ok(earthQuakesDepthData);
         } catch (NumberFormatException e) {
