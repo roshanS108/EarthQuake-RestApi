@@ -94,16 +94,6 @@ public class EarthquakeDisplayController {
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         }
     }
-    // Exception handler to handle custom exception
-    @ExceptionHandler
-    public ResponseEntity<QuakeDataErrorResponse> handleException(QuakeDataNotFoundException exc) {
-        QuakeDataErrorResponse error = new QuakeDataErrorResponse();
-        error.setStatus(HttpStatus.NOT_FOUND.value());
-        error.setMessage(exc.getMessage());
-        error.setTimeStamp(String.valueOf(System.currentTimeMillis()));
-        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
-    }
-
     /**
      * Filters earthquake data based on specified magnitude and depth ranges.
      * @param minMagnitude The minimum magnitude of earthquakes to include.
