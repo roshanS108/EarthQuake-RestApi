@@ -88,7 +88,7 @@ public class EarthQuakeParser {
         return list;
     }
     /**
-     * Reads earthquake titles(country name) from a given data source.
+     * Reads earthquake titles(country name) from a data source.
      *
      * @param source The location of the earthquake data source.
      * @return An ArrayList containing the titles of earthquake.
@@ -96,22 +96,17 @@ public class EarthQuakeParser {
     public ArrayList<String> readTitles(String source) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         ArrayList<String> titles = new ArrayList<>();
-
         try {
             DocumentBuilder builder = factory.newDocumentBuilder();
             Document document;
-
             if (source.startsWith("http")) {
                 document = builder.parse(source);
             } else {
                 document = builder.parse(new File(source));
             }
-
             NodeList nodeList = document.getDocumentElement().getChildNodes();
-
             // Create an instance of Parser object
             ElementParser<String> titleParser = new TitleParser();
-
 
             for (int k = 0; k < nodeList.getLength(); k++) {
                 Node node = nodeList.item(k);
@@ -125,10 +120,8 @@ public class EarthQuakeParser {
         } catch (ParserConfigurationException | SAXException | IOException e) {
             e.printStackTrace();
         }
-
         return titles;
     }
-
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException{
         EarthQuakeParser xp = new EarthQuakeParser();
         //String source = "data/2.5_week.atom";
