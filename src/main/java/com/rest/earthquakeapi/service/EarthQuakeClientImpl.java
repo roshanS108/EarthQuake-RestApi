@@ -1,13 +1,16 @@
 package com.rest.earthquakeapi.service;
 import com.rest.earthquakeapi.ParserManager.EarthQuakeParser;
 import com.rest.earthquakeapi.apache.Location;
+import com.rest.earthquakeapi.factorypatterns.EarthQuakeParserFactory;
 import com.rest.earthquakeapi.filter.*;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -19,9 +22,9 @@ import java.util.stream.Collectors;
 @Service
 public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     private static final Logger logger = LoggerFactory.getLogger(EarthQuakeClientImpl.class);
-
-    public EarthQuakeClientImpl(){
-
+    private final EarthQuakeParser parser;
+    public EarthQuakeClientImpl(EarthQuakeParser parser){
+        this.parser = parser;
     }
     @Override
     public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
@@ -43,7 +46,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     @Override
     public List<QuakeEntry> bigQuakes() {
         try {
-            EarthQuakeParser parser = new EarthQuakeParser();
             String source = "data/nov20quakedatasmall.atom";
             ArrayList<QuakeEntry> list = parser.read(source);
             ArrayList<QuakeEntry> largeQuakes = filterByMagnitude(list, 5.0);
@@ -85,7 +87,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
      */
     @Override
     public List<QuakeEntry> earthQuakesNearMe(double distMax, Location from) {
-        EarthQuakeParser parser = new EarthQuakeParser();
 //        String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list = parser.read(source);
@@ -131,7 +132,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     public List<QuakeEntry> filterPossibleAllEarthquakeData(Double minMagnitude, Double maxMagnitude,
                                                             Double minDepth, Double maxDepth, Location location, Double maxDistance,
                                                             String phrase, String where) {
-        EarthQuakeParser parser = new EarthQuakeParser();
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list  = parser.read(source);
 
@@ -153,6 +153,29 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 
         return result;
     }
+
+    /**
+     * Fetches the country name from data source
+     * @return
+     */
+    @Override
+    public List<QuakeEntry> getCountryNameFromEarthquakeData(String countryName) {
+
+        EarthQuakeParser parser = new EarthQuakeParser();
+
+        String source = "data/nov20quakedatasmall.atom";
+        ArrayList<String> list =  parser.readTitles(source);
+        System.out.println("====================");
+        System.out.println("read data for " + list.size() + " quakes");
+
+        for(String countryTitle : list){
+
+
+        }
+
+        return null;
+    }
+
     /**
      * method for filtering the magnitude and depth
      */
@@ -160,7 +183,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
                                              double maxMagnitude,
                                              double minDepth,
                                              double maxDepth){
-        EarthQuakeParser parser = new EarthQuakeParser();
 //         String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list = parser.read(source);
@@ -206,7 +228,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
      * It also prints the total number of earthquakes found that match the depth criteria.
      */
     public List<QuakeEntry> quakesOfDepth(double minDepth, double maxDepth) {
-        EarthQuakeParser parser = new EarthQuakeParser();
         //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list = parser.read(source);
@@ -230,7 +251,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 
     @Override
     public List<QuakeEntry> findClosestEarthQuakes(Location current, int howMany) {
-        EarthQuakeParser parser = new EarthQuakeParser();
         String source = "data/nov20quakedatasmall.atom";
 //        String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         ArrayList<QuakeEntry> list  = parser.read(source);
@@ -323,7 +343,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
     @Override
     public List<QuakeEntry> findEarthQuakesByPhrase(String phrase, String where) {
-        EarthQuakeParser parser = new EarthQuakeParser();
         //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list = parser.read(source);
