@@ -8,10 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -173,7 +171,11 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
             String countryName = extractCountryName(title);
             countryList.add(countryName);
         }
-        return countryList;
+        //Removes duplicates country name
+        Set<String> set = new HashSet<>(countryList);
+        ArrayList<String> countriesNameWithoutDuplicates = new ArrayList<>(set);
+        Collections.sort(countriesNameWithoutDuplicates);
+        return countriesNameWithoutDuplicates;
     }
 
     private String extractCountryName(String title){
