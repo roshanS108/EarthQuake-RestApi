@@ -6,6 +6,7 @@ import com.rest.earthquakeapi.filter.*;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -23,6 +24,9 @@ import java.util.stream.Collectors;
 public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     private static final Logger logger = LoggerFactory.getLogger(EarthQuakeClientImpl.class);
     private final EarthQuakeParser parser;
+
+    @Value("${earthquake.source}")
+    private String source;
     public EarthQuakeClientImpl(EarthQuakeParser parser){
         this.parser = parser;
     }
@@ -110,7 +114,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         return closeEarthQuakes;
     }
 
-    public ArrayList<QuakeEntry> filter(ArrayList<QuakeEntry> quakeData, Filter f) {
+    private ArrayList<QuakeEntry> filter(ArrayList<QuakeEntry> quakeData, Filter f) {
         ArrayList<QuakeEntry> answer = new ArrayList<>();
         for (QuakeEntry qe : quakeData) {
             if (f.satisfies(qe)) {
@@ -155,27 +159,32 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     }
 
     /**
-     * Fetches the country name from data source
+     * Fetches the country name from Earthquake data source.
      * @return
      */
     @Override
-    public List<QuakeEntry> getCountryNameFromEarthquakeData(String countryName) {
-
-        EarthQuakeParser parser = new EarthQuakeParser();
-
-        String source = "data/nov20quakedatasmall.atom";
-        ArrayList<String> list =  parser.readTitles(source);
+    public List<String> getCountryNameFromEarthquakeData() {
+        List<String> countryList = new ArrayList<>();
+        ArrayList<String> countries = parser.readTitles(source);
         System.out.println("====================");
-        System.out.println("read data for " + list.size() + " quakes");
+        System.out.println("read data for " + countryList.size() + " quakes");
 
-        for(String countryTitle : list){
-
-
+        for (String title : countries) {
+            String countryName = extractCountryName(title);
+            countryList.add(countryName);
         }
-
-        return null;
+        return countryList;
     }
 
+    private String extractCountryName(String title){
+        int commaIndex = title.indexOf(",");
+        if(commaIndex != -1){ //checking if the title contains the ","
+            return title.substring(commaIndex+2).trim(); //trim any leading or trailing spaces
+        }else{
+            return title;
+        }
+
+    }
     /**
      * method for filtering the magnitude and depth
      */
