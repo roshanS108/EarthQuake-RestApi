@@ -87,19 +87,69 @@ public class EarthQuakeParser {
 
         return list;
     }
+    /**
+     * Reads earthquake titles(country name) from a given data source.
+     *
+     * @param source The location of the earthquake data source.
+     * @return An ArrayList containing the titles of earthquake.
+     */
+    public ArrayList<String> readTitles(String source) {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        ArrayList<String> titles = new ArrayList<>();
+
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document;
+
+            if (source.startsWith("http")) {
+                document = builder.parse(source);
+            } else {
+                document = builder.parse(new File(source));
+            }
+
+            NodeList nodeList = document.getDocumentElement().getChildNodes();
+
+            // Create an instance of Parser object
+            ElementParser<String> titleParser = new TitleParser();
+
+
+            for (int k = 0; k < nodeList.getLength(); k++) {
+                Node node = nodeList.item(k);
+
+                if (node.getNodeName().equals("entry")) {
+                    Element elem = (Element) node;
+                    String newTitleData = titleParser.parseElement(elem);
+                    titles.add(newTitleData);
+                }
+            }
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return titles;
+    }
 
     public static void main(String[] args) throws ParserConfigurationException, SAXException, IOException{
         EarthQuakeParser xp = new EarthQuakeParser();
         //String source = "data/2.5_week.atom";
         //String source = "http://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         String source = "data/nov20quakedatasmall.atom";
-        String data ="M 1.7 - 75km WSW of Cantwell, Alaska";
+        ArrayList<String> list  = xp.readTitles(source);
+    /*    String data ="M 1.7 - 75km WSW of Cantwell, Alaska";
         ArrayList<QuakeEntry> list  = xp.read(source);
         Collections.sort(list);
         for(QuakeEntry loc : list){
             System.out.println(loc);
         }
-        System.out.println("# quakes = "+list.size());
+        System.out.println("# quakes = "+list.size());*/
+
+
+        for (String title : list) {
+            // Example: Print each title
+            System.out.println("Title: " + title);
+
+
+        }
 
 
     }
