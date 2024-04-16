@@ -7,6 +7,7 @@ import com.rest.earthquakeapi.exception.QuakeDataNotFoundException;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
 import com.rest.earthquakeapi.service.MagnitudeAnalysisService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -30,6 +31,23 @@ public class EarthquakeDisplayController {
         this.earthquakeDataProcessor = earthquakeDataProcessor;
         this.magnitudeAnalysisService = magnitudeAnalysisService;
     }
+    @GetMapping("/country-name")
+    public ResponseEntity<?> getCountryName(){
+        try {
+            List<String> bigQuakesData = earthquakeDataProcessor.getCountryNameFromEarthquakeData();
+            // if list is empty inform the user that no earthquake data is found
+            if (bigQuakesData.isEmpty()) {
+                String errorMessage = "No country names found in earthquake data.";
+                throw new QuakeDataNotFoundException(errorMessage);
+            }
+            return ResponseEntity.ok(bigQuakesData);
+        }
+        catch (Exception e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     @GetMapping("/bigQuakes")
     public ResponseEntity<?> getBigQuakes() {
         try {
