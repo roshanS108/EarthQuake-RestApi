@@ -34,5 +34,9 @@ public interface EarthquakeDataProcessor {
 
 
 
+    List<QuakeEntry> getCountryNameFromEarthquakeData(String name);
+
+
+
 
 }
