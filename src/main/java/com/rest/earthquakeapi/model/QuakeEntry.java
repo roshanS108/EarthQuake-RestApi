@@ -50,6 +50,30 @@ public class QuakeEntry implements Comparable<QuakeEntry>{
         return title;
     }
 
+    public Location getMyLocation() {
+        return myLocation;
+    }
+
+    public void setMyLocation(Location myLocation) {
+        this.myLocation = myLocation;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDepth(double depth) {
+        this.depth = depth;
+    }
+
+    public void setMagnitude(double magnitude) {
+        this.magnitude = magnitude;
+    }
+
     public double getDepth(){
         return depth;
     }
