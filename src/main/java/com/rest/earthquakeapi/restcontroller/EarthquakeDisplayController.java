@@ -31,8 +31,13 @@ public class EarthquakeDisplayController {
         this.earthquakeDataProcessor = earthquakeDataProcessor;
         this.magnitudeAnalysisService = magnitudeAnalysisService;
     }
-    @GetMapping("/country-name")
-    public ResponseEntity<?> getCountryName(){
+    /**
+     * Retrieves the list of locations where earthquakes occurred.
+     *
+     * @return ResponseEntity containing the list of locations as JSON.
+     */
+    @GetMapping("/earthquake-location")
+    public ResponseEntity<?> getEarthquakeLocations(){
         try {
             List<String> bigQuakesData = earthquakeDataProcessor.getCountryNameFromEarthquakeData();
             // if list is empty inform the user that no earthquake data is found
