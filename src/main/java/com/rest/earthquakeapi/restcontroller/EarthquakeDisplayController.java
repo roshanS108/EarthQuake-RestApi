@@ -9,6 +9,7 @@ import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
 import com.rest.earthquakeapi.service.MagnitudeAnalysisService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -53,6 +54,12 @@ public class EarthquakeDisplayController {
         }
     }
 
+//    @GetMapping("/bigQuakeData")
+//    public Page<QuakeEntry> getBigQuakeData(@RequestParam(defaultValue = "0") int page,
+//                                            @RequestParam(defaultValue = "10") int size){
+//
+//        return earthquakeDataProcessor.getBiQuakeData(page, size);
+//    }
     @GetMapping("/bigQuakes")
     public ResponseEntity<?> getBigQuakes() {
         try {
