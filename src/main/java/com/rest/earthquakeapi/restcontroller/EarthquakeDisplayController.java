@@ -1,28 +1,18 @@
 package com.rest.earthquakeapi.restcontroller;
 import com.rest.earthquakeapi.apache.Location;
-import com.rest.earthquakeapi.exception.InvalidDoubleException;
-import com.rest.earthquakeapi.exception.InvalidTypeException;
 import com.rest.earthquakeapi.exception.QuakeDataErrorResponse;
 import com.rest.earthquakeapi.exception.QuakeDataNotFoundException;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
 import com.rest.earthquakeapi.service.MagnitudeAnalysisService;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/earthquakes")
 public class EarthquakeDisplayController {
-
     private EarthquakeDataProcessor earthquakeDataProcessor;
 
     private MagnitudeAnalysisService magnitudeAnalysisService;
@@ -53,13 +43,24 @@ public class EarthquakeDisplayController {
             return ResponseEntity.badRequest().build();
         }
     }
+    @GetMapping("/bigQuakeData")
+    public ResponseEntity<?> getBigQuakeData(@RequestParam(defaultValue = "0") int page,
+                                            @RequestParam(defaultValue = "10") int size){
+        try {
+            List<QuakeEntry> bigQuakesData = earthquakeDataProcessor.getPaginatedQuakeData(page, size);
+            // if list is empty inform the user that no earthquake data is found
+            if (bigQuakesData.isEmpty()) {
+                String errorMessage = "No country names found in earthquake data.";
+                throw new QuakeDataNotFoundException(errorMessage);
+            }
+            return ResponseEntity.ok(bigQuakesData);
+        }
+        catch (Exception e) {
+            // handling invalid non-double values
+            return ResponseEntity.badRequest().build();
+        }
 
-//    @GetMapping("/bigQuakeData")
-//    public Page<QuakeEntry> getBigQuakeData(@RequestParam(defaultValue = "0") int page,
-//                                            @RequestParam(defaultValue = "10") int size){
-//
-//        return earthquakeDataProcessor.getBiQuakeData(page, size);
-//    }
+    }
     @GetMapping("/bigQuakes")
     public ResponseEntity<?> getBigQuakes() {
         try {

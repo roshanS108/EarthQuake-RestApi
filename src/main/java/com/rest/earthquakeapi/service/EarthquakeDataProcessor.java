@@ -1,9 +1,6 @@
 package com.rest.earthquakeapi.service;
-
 import com.rest.earthquakeapi.apache.Location;
 import com.rest.earthquakeapi.model.QuakeEntry;
-//import org.springframework.data.domain.Page;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +33,8 @@ public interface EarthquakeDataProcessor {
 
 
     List<String> getCountryNameFromEarthquakeData();
+    List<QuakeEntry> getPaginatedQuakeData(int pageNumber, int pageSize);
 
-//    Page<QuakeEntry> getBiQuakeData(int pageNumber, int pageSize);
 
 
 
