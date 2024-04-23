@@ -48,7 +48,6 @@ public class EarthQuakeParser {
 
                     //retrieves the latitude and longittude of earthquake.
                     NodeList t1 = elem.getElementsByTagName("georss:point");
-
                     double lat = 0.0, lon = 0.0, depth = 0.0;
 
                     if (t1 != null && t1.getLength()>0) {
@@ -58,12 +57,7 @@ public class EarthQuakeParser {
                         lat = Double.parseDouble(args[0]);
                         lon = Double.parseDouble(args[1]);
                     }
-
-                    System.out.println("t1 is : " + lat + " " + lon);
-
                     String dateTime = dateTimeParser.parseElement(elem);
-                    System.out.println("the dateTime is : " + dateTime);
-
                     //depth parser
                     depth = depthParser.parseElement(elem);
 
@@ -74,7 +68,6 @@ public class EarthQuakeParser {
                     double mag = magParser.parseElement(elem);
 
                     String title = titleParser.parseElement(elem);
-
 
                     QuakeEntry loc = new QuakeEntry(id,lat,lon,mag,title,depth,dateTime,link);
                     // Add the quakeEntry to the list
@@ -145,9 +138,7 @@ public class EarthQuakeParser {
                             lat = Double.parseDouble(args[0]);
                             lon = Double.parseDouble(args[1]);
                         }
-                        System.out.println("t1 is : " + lat + " " + lon);
-                        String dateTime = (String) dateTimeParser.parseElement(elem);
-                        System.out.println("the dateTime is : " + dateTime);
+                        String dateTime = dateTimeParser.parseElement(elem);
                         //depth parser
                         depth = depthParser.parseElement(elem);
 
