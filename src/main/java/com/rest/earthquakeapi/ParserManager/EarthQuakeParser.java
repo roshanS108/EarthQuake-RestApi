@@ -94,7 +94,7 @@ public class EarthQuakeParser {
      * @param pageSize    the maximum number of earthquake entries per page
      * @return            a list of earthquake entries for the specified page
      */
-    public static ArrayList<QuakeEntry> paginationRead(String source, int pageNumber, int pageSize) {
+    public ArrayList<QuakeEntry> getPaginatedEarthquakeData(String source, int pageNumber, int pageSize) {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         ArrayList<QuakeEntry> list = new ArrayList<QuakeEntry>();
         try {

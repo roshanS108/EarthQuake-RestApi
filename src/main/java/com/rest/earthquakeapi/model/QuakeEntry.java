@@ -28,6 +28,14 @@ public class QuakeEntry implements Comparable<QuakeEntry>{
     public QuakeEntry(){
 
     }
+    public QuakeEntry(double lat, double lon, double mag,
+                      String t, double d) {
+        myLocation = new Location(lat,lon);
+
+        magnitude = mag;
+        title = t;
+        depth = d;
+    }
     public QuakeEntry(String id2, double lat, double lon, double mag,
                       String t, double d, String date, String link) {
         myLocation = new Location(lat,lon);

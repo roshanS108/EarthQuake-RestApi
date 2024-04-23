@@ -1,16 +1,11 @@
 package com.rest.earthquakeapi.service;
 import com.rest.earthquakeapi.ParserManager.EarthQuakeParser;
 import com.rest.earthquakeapi.apache.Location;
-import com.rest.earthquakeapi.factorypatterns.EarthQuakeParserFactory;
 import com.rest.earthquakeapi.filter.*;
 import com.rest.earthquakeapi.model.QuakeEntry;
-import com.rest.earthquakeapi.pagination.EarthQuakeParserForPagination;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -48,12 +43,9 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         logger.info("Filtered earthquakes by magnitude greater than {}. Number of quakes: {}", magMin, filteredList.size());
         return filteredList;
     }
-    public Page<QuakeEntry> getFilterByMagnitude(int pageNumber, int pageSize){
-        //create pageable with object pagination parameters
-        PageRequest pageRequest = PageRequest.of(pageNumber, pageSize);
-
-        //get filteredByMag data
-        return null;
+    @Override
+    public List<QuakeEntry> getPaginatedQuakeData(int pageNumber, int pageSize) {
+        return parser.getPaginatedEarthquakeData(source, pageNumber, pageSize);
     }
 
     @Override
@@ -189,20 +181,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         return countriesNameWithoutDuplicates;
     }
 
-    @Override
-    public Page<QuakeEntry> getBiQuakeData(int pageNumber, int pageSize) {
 
-       /* //read the data from the source
-        ArrayList<QuakeEntry> allQuakeEntries = EarthQuakeParserForPagination.read(source, pageNumber, pageSize);
-        System.out.println("all QuakeEntries is: " + allQuakeEntries);
-
-        Page<QuakeEntry> page = new PageImpl<>(allQuakeEntries, PageRequest.of(pageNumber, pageSize), allQuakeEntries.size());
-
-        System.out.println("the page is: " + page);
-        // fetch the page
-        return page;*/
-        return null;
-    }
 
     private String extractCountryName(String title){
         int commaIndex = title.indexOf(",");
