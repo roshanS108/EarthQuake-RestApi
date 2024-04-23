@@ -9,7 +9,7 @@ import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
 import com.rest.earthquakeapi.service.MagnitudeAnalysisService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
+//import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
