@@ -4,7 +4,6 @@ import com.rest.earthquakeapi.exception.QuakeDataErrorResponse;
 import com.rest.earthquakeapi.exception.QuakeDataNotFoundException;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
-import com.rest.earthquakeapi.service.MagnitudeAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,13 +13,9 @@ import java.util.List;
 @RequestMapping("/earthquakes")
 public class EarthquakeDisplayController {
     private EarthquakeDataProcessor earthquakeDataProcessor;
-
-    private MagnitudeAnalysisService magnitudeAnalysisService;
-
     @Autowired
-    public EarthquakeDisplayController(EarthquakeDataProcessor earthquakeDataProcessor, MagnitudeAnalysisService magnitudeAnalysisService){
+    public EarthquakeDisplayController(EarthquakeDataProcessor earthquakeDataProcessor){
         this.earthquakeDataProcessor = earthquakeDataProcessor;
-        this.magnitudeAnalysisService = magnitudeAnalysisService;
     }
     /**
      * Retrieves the list of locations where earthquakes occurred.
@@ -343,7 +338,7 @@ public class EarthquakeDisplayController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(new QuakeDataErrorResponse("Parameter 'howMany' must be a positive integer."));
             }
-            List<QuakeEntry> largestEarthQuakesData = magnitudeAnalysisService.findLargestEarthQuakes(howMany);
+            List<QuakeEntry> largestEarthQuakesData = earthquakeDataProcessor.findLargestEarthQuakes(howMany);
             // if list is empty inform the user that no earthquake data is found
             if (largestEarthQuakesData.isEmpty()) {
                 String errorMessage = "No earthquake data found";
