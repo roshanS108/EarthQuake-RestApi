@@ -1,5 +1,6 @@
 FEATURES:
 
+CACHING
 for endpoint /bigQuakes
 - create a feature that gets earthquake magnitude greater than 5.0 periodically.
 Like for example: user sends the request first
@@ -8,5 +9,20 @@ Like for example: user sends the request first
 --> third time sends the request. returns the new data, replacing the second data with third new data.
 
 
+
+RATER LIMITER:
+- implement rate limiter, to block infinite amount of api call
+
+
+OPEN API:
+- Create comprehensive API-Documentation
+
+
+API GATEWAY:
+
+
+ASPECT ORIENTED PROGRAMMING:
+- logging
+- error handling
 
 
