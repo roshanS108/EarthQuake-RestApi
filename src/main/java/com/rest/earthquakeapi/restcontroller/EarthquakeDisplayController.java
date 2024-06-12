@@ -38,24 +38,6 @@ public class EarthquakeDisplayController {
             return ResponseEntity.badRequest().build();
         }
     }
-    @GetMapping("/bigQuakeData")
-    public ResponseEntity<?> getBigQuakeData(@RequestParam(defaultValue = "0") int page,
-                                            @RequestParam(defaultValue = "10") int size){
-        try {
-            List<QuakeEntry> bigQuakesData = earthquakeDataProcessor.getPaginatedQuakeData(page, size);
-            // if list is empty inform the user that no earthquake data is found
-            if (bigQuakesData.isEmpty()) {
-                String errorMessage = "No country names found in earthquake data.";
-                throw new QuakeDataNotFoundException(errorMessage);
-            }
-            return ResponseEntity.ok(bigQuakesData);
-        }
-        catch (Exception e) {
-            // handling invalid non-double values
-            return ResponseEntity.badRequest().build();
-        }
-
-    }
     @GetMapping("/bigQuakes")
     public ResponseEntity<?> getBigQuakes() {
         try {
@@ -120,23 +102,24 @@ public class EarthquakeDisplayController {
             return ResponseEntity.badRequest().body("Invalid parameter value. Please provide numeric values.");
         }
     }
+
     /**
-     * Filters earthquake data based on specified magnitude and depth ranges.
+     * Filters all earthquake data based on magnitude, depth ranges, latitude, longitude, distance, phrase(title), where(where earthquake occurred".
      * @param minMagnitude The minimum magnitude of earthquakes to include.
      * @param maxMagnitude The maximum magnitude of earthquakes to include.
      * @param minDepth     The minimum depth of earthquakes to include.
      * @param maxDepth     The maximum depth of earthquakes to include.
      * @return A list of QuakeEntry objects representing earthquakes that match the specified criteria.
      * @GetRequest URL: {{url}}/earthquakes/filtered-quakes2?minMagnitude={minMag}&maxMagnitude={maxMag}&latitude={latitude}&longitude={longitude}&maxDistance={maxDistance}&phrase={phrase}&where={where}
-     * @Testing Url:{{url}}/earthquakes/filtered-quakes2?minMagnitude=0.0&maxMagnitude=3.0&latitude=36.1314&longitude=-95.9372&maxDistance=10000000&phrase=California&where=any
+     * @Testing Url:{{url}}/earthquakes/filtered-quakes2?minMagnitude=0.0&maxMagnitude=2.0&latitude=36.1314&longitude=-95.9372&maxDistance=10000000&phrase=Alaska&where=any
      *
      */
     @GetMapping("/filtered-quakes2")
     public ResponseEntity<?> getFilteredQuakes2(
             @RequestParam(required = false) String minMagnitude,
             @RequestParam(required = false) String maxMagnitude,
-            @RequestParam(required = false, defaultValue = "0.0") String minDepth,
-            @RequestParam(required = false, defaultValue = "0.0") String maxDepth,
+            @RequestParam(required = false) String minDepth,
+            @RequestParam(required = false) String maxDepth,
             @RequestParam(required = false) String latitude,
             @RequestParam(required = false) String longitude,
             @RequestParam(required = false) String maxDistance,
@@ -151,6 +134,7 @@ public class EarthquakeDisplayController {
             double latitudeValue = Double.parseDouble(latitude);
             double longitudeValue = Double.parseDouble(longitude);
             double maxDistanceValue = Double.parseDouble(maxDistance);
+
             // Create Location object if latitude and longitude are provided by user
             Location location = new Location(latitudeValue, longitudeValue);
 
@@ -190,6 +174,7 @@ public class EarthquakeDisplayController {
         }
 
     }
+
     /**
      Retrieves a list of earthquake entries near a specified location within a maximum distance.
      @param distMax The maximum distance within which earthquakes are searched. -->distMax = 1000000
@@ -208,7 +193,6 @@ public class EarthquakeDisplayController {
             double distMaxValue = Double.parseDouble(distMax);
             double latitudeValue = Double.parseDouble(latitude);
             double longitudeValue = Double.parseDouble(longitude);
-
 
             // checking if any of the required parameters are missing
             if(distMaxValue == 0.0 || latitudeValue == 0.0 || longitudeValue == 0.0){
@@ -275,7 +259,7 @@ public class EarthquakeDisplayController {
         }
     }
     /**
-     * Retrieves a list of earthquake entries closest to the specified location.
+     * Retrieves a list of earthquake entries closest to the specified location based on latitude and longitude. You can specify the number of earthquake entries to retrieve using the 'howMany' parameter.
      * @param latitude The latitude of the location.
      * @param longitude The longitude of the location.
      * @param howMany The number of closest earthquakes to retrieve.
