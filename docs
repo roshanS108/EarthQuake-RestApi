@@ -1,0 +1,12 @@
+FEATURES:
+
+for endpoint /bigQuakes
+- create a feature that gets earthquake magnitude greater than 5.0 periodically.
+Like for example: user sends the request first
+--> returns this amount of data.
+--> second time sends the request. returns the new data, replacing the old data that was initially received.
+--> third time sends the request. returns the new data, replacing the second data with third new data.
+
+
+
+

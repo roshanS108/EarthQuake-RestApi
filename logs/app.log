@@ -1,4 +1,8 @@
-2024-04-23 14:55:51,677 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 17.0.10 with PID 32584 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
-2024-04-23 14:55:51,679 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
-2024-04-23 14:55:51,680 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
-2024-04-23 14:55:52,887 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.57 seconds (process running for 2.297)
+2024-06-08 15:57:07,251 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 17.0.11 with PID 27167 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-06-08 15:57:07,253 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-06-08 15:57:07,254 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-06-08 15:57:08,273 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.414 seconds (process running for 2.151)
+2024-06-08 15:58:05,428 INFO c.r.e.EarthquakeRestApiApplication [main] Starting EarthquakeRestApiApplication using Java 17.0.11 with PID 27408 (/home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api/target/classes started by roshan in /home/roshan/Documents/RestApi-Quakes/earthquake-rest-api/earthquake-rest-api)
+2024-06-08 15:58:05,428 DEBUG c.r.e.EarthquakeRestApiApplication [main] Running with Spring Boot v3.2.2, Spring v6.1.3
+2024-06-08 15:58:05,429 INFO c.r.e.EarthquakeRestApiApplication [main] No active profile set, falling back to 1 default profile: "default"
+2024-06-08 15:58:06,544 INFO c.r.e.EarthquakeRestApiApplication [main] Started EarthquakeRestApiApplication in 1.471 seconds (process running for 2.089)

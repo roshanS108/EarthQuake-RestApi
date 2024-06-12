@@ -30,12 +30,9 @@ public interface EarthquakeDataProcessor {
                                                      Double minDepth, Double maxDepth,
                                                      Location location, Double maxDistance, String phrase, String where);
 
-
+    List<QuakeEntry> findLargestEarthQuakes(int howMany);
 
     List<String> getCountryNameFromEarthquakeData();
-    List<QuakeEntry> getPaginatedQuakeData(int pageNumber, int pageSize);
-
-
 
 
 }

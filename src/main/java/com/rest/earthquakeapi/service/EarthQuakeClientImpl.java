@@ -25,32 +25,10 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     public EarthQuakeClientImpl(EarthQuakeParser parser){
         this.parser = parser;
     }
-    @Override
-    public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
-                                                   double magMin){
-        if(quakeData == null){
-            logger.error("Quake data is null.");
-            throw new IllegalArgumentException("quakeData cannot be null");
-        }
-        if(magMin < 0){
-            logger.error("Negative magnitude minimum: {}", magMin);
-            throw new IllegalArgumentException("magMin must be non-negative");
-        }
-        ArrayList<QuakeEntry> filteredList = quakeData.stream()
-                .filter(quakeEntry -> quakeEntry.getMagnitude() > magMin)
-                .collect(Collectors.toCollection(ArrayList::new));
-        logger.info("Filtered earthquakes by magnitude greater than {}. Number of quakes: {}", magMin, filteredList.size());
-        return filteredList;
-    }
-    @Override
-    public List<QuakeEntry> getPaginatedQuakeData(int pageNumber, int pageSize) {
-        return parser.getPaginatedEarthquakeData(source, pageNumber, pageSize);
-    }
 
     @Override
     public List<QuakeEntry> bigQuakes() {
         try {
-            String source = "data/nov20quakedatasmall.atom";
             ArrayList<QuakeEntry> list = parser.read(source);
             ArrayList<QuakeEntry> largeQuakes = filterByMagnitude(list, 5.0);
             // Logging earthquakes
@@ -69,16 +47,24 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
             throw new RuntimeException("Error processing earthquake data.", e);
         }
     }
-    public void dumpCSV(ArrayList<QuakeEntry> list) {
-        System.out.println("Latitude,Longitude,Magnitude,Info");
-        for (QuakeEntry qe : list) {
-            System.out.printf("%4.2f,%4.2f,%4.2f,%s\n",
-                    qe.getLocation().getLatitude(),
-                    qe.getLocation().getLongitude(),
-                    qe.getMagnitude(),
-                    qe.getInfo());
+    @Override
+    public ArrayList<QuakeEntry> filterByMagnitude(ArrayList<QuakeEntry> quakeData,
+                                                   double magMin){
+        if(quakeData == null){
+            logger.error("Quake data is null.");
+            throw new IllegalArgumentException("quakeData cannot be null");
         }
+        if(magMin < 0){
+            logger.error("Negative magnitude minimum: {}", magMin);
+            throw new IllegalArgumentException("magMin must be non-negative");
+        }
+        ArrayList<QuakeEntry> filteredList = quakeData.stream()
+                .filter(quakeEntry -> quakeEntry.getMagnitude() > magMin)
+                .collect(Collectors.toCollection(ArrayList::new));
+        logger.info("Filtered earthquakes by magnitude greater than {}. Number of quakes: {}", magMin, filteredList.size());
+        return filteredList;
     }
+
     /**
      * Finds and returns a list of earthquakes that happened near a specified location.
      * Parameters:
@@ -136,10 +122,7 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     public List<QuakeEntry> filterPossibleAllEarthquakeData(Double minMagnitude, Double maxMagnitude,
                                                             Double minDepth, Double maxDepth, Location location, Double maxDistance,
                                                             String phrase, String where) {
-        String source = "data/nov20quakedatasmall.atom";
         ArrayList<QuakeEntry> list  = parser.read(source);
-
-        System.out.println("read data for "+list.size()+" quakes");
 
         MatchAllFilter maf = new MatchAllFilter();
         maf.addFilter(new MagnitudeFilter(minMagnitude, maxMagnitude));
@@ -158,6 +141,58 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
         return result;
     }
 
+    @Override
+    public List<QuakeEntry> findLargestEarthQuakes(int howMany) {
+        ArrayList<QuakeEntry> list = parser.read(source);
+
+        ArrayList<QuakeEntry> largestEarthQuake = getLargest(list, howMany);
+        // Printing the total number of earthquakes
+        System.out.println("Number of earthquakes read: " + list.size());
+
+        return largestEarthQuake;
+    }
+    /**
+     * Finds and returns a list of the top 'howMany' largest magnitude earthquakes from the given list of quakes.
+     * The returned earthquakes are sorted by magnitude, with the largest earthquake at the first position.
+     * If the input list contains fewer earthquakes than 'howMany', the method returns all available earthquakes.
+     *
+     * @param quakeData An ArrayList of QuakeEntry representing earthquake data.
+     * @param howMany   The number of top magnitude earthquakes to return.
+     * @return An ArrayList of QuakeEntry containing the largest earthquakes, up to 'howMany', sorted by magnitude.
+     */
+    private ArrayList<QuakeEntry> getLargest(ArrayList<QuakeEntry> quakeData, int howMany) {
+        ArrayList<QuakeEntry> ret = new ArrayList<QuakeEntry>();
+        ArrayList<QuakeEntry> copy = new ArrayList<QuakeEntry>(quakeData);
+
+        for (int i = 0; i < howMany; i++) {
+            int maxIndex = indexOfLargest(copy);
+            ret.add(copy.get(maxIndex));
+            copy.remove(maxIndex);
+        }
+        return ret;
+    }
+
+    /**
+     * Returns the index location in data of earthquake with largest magnitude.
+     * @param data An ArrayList of QuakeEntry representing earthquake data.
+     * @return the index location of largest earthquake magnitude
+     */
+    public int indexOfLargest(ArrayList<QuakeEntry> data){
+        if(data == null || data.isEmpty()){
+            return -1;
+        }
+        double maxMagnitude = Integer.MIN_VALUE;
+        int maxIndex = -1;
+        for (int i = 0; i < data.size(); i++) {
+            double currMagnitude = data.get(i).getMagnitude();
+            if (currMagnitude > maxMagnitude) {
+                maxMagnitude = currMagnitude;
+                maxIndex = i;
+            }
+        }
+        return maxIndex;
+    }
+
     /**
      * Fetches the country name from Earthquake data source.
      * @return
@@ -166,9 +201,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
     public List<String> getCountryNameFromEarthquakeData() {
         List<String> countryList = new ArrayList<>();
         ArrayList<String> countries = parser.readTitles(source);
-        System.out.println("====================");
-        System.out.println("read data for " + countryList.size() + " quakes");
-
         for (String title : countries) {
             String countryName = extractCountryName(title);
             countryList.add(countryName);
@@ -262,8 +294,6 @@ public class EarthQuakeClientImpl implements EarthquakeDataProcessor {
 
     @Override
     public List<QuakeEntry> findClosestEarthQuakes(Location current, int howMany) {
-        String source = "data/nov20quakedatasmall.atom";
-//        String source = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.atom";
         ArrayList<QuakeEntry> list  = parser.read(source);
         System.out.println("read data for "+list.size());
 
