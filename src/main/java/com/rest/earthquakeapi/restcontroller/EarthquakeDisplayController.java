@@ -4,15 +4,19 @@ import com.rest.earthquakeapi.exception.QuakeDataErrorResponse;
 import com.rest.earthquakeapi.exception.QuakeDataNotFoundException;
 import com.rest.earthquakeapi.model.QuakeEntry;
 import com.rest.earthquakeapi.service.EarthquakeDataProcessor;
+import com.rest.earthquakeapi.sorting.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Collections;
 import java.util.List;
 @RestController
 @RequestMapping("/earthquakes")
 public class EarthquakeDisplayController {
     private EarthquakeDataProcessor earthquakeDataProcessor;
+    private DifferentSorters differentSorters = new DifferentSorters();
     @Autowired
     public EarthquakeDisplayController(EarthquakeDataProcessor earthquakeDataProcessor){
         this.earthquakeDataProcessor = earthquakeDataProcessor;
@@ -26,6 +30,7 @@ public class EarthquakeDisplayController {
     public ResponseEntity<?> getEarthquakeLocations(){
         try {
             List<String> bigQuakesData = earthquakeDataProcessor.getCountryNameFromEarthquakeData();
+            Collections.sort(bigQuakesData);
             // if list is empty inform the user that no earthquake data is found
             if (bigQuakesData.isEmpty()) {
                 String errorMessage = "No country names found in earthquake data.";
@@ -42,6 +47,7 @@ public class EarthquakeDisplayController {
     public ResponseEntity<?> getBigQuakes() {
         try {
             List<QuakeEntry> bigQuakesData = earthquakeDataProcessor.bigQuakes();
+            differentSorters.sortAll();
             // if list is empty inform the user that no earthquake data is found
             if (bigQuakesData.isEmpty()) {
                 String errorMessage = "No Earthquake data found.";
@@ -90,6 +96,11 @@ public class EarthquakeDisplayController {
                 throw new QuakeDataNotFoundException(errorMessage);
             }
             List<QuakeEntry> filteredQuakesData = earthquakeDataProcessor.getFilteredQuakes(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue);
+            //sort the Magnitude and Depth
+            Collections.sort(filteredQuakesData, new MagnitudeComparator());
+            Collections.sort(filteredQuakesData, new DepthComparator());
+
+
 
             // if list is empty inform the user that no earthquake data is found
             if(filteredQuakesData.isEmpty()){
@@ -114,7 +125,7 @@ public class EarthquakeDisplayController {
      * @Testing Url:{{url}}/earthquakes/filtered-quakes2?minMagnitude=0.0&maxMagnitude=2.0&latitude=36.1314&longitude=-95.9372&maxDistance=10000000&phrase=Alaska&where=any
      *
      */
-    @GetMapping("/filtered-quakes2")
+    @GetMapping("/filter-all")
     public ResponseEntity<?> getFilteredQuakes2(
             @RequestParam(required = false) String minMagnitude,
             @RequestParam(required = false) String maxMagnitude,
@@ -161,6 +172,7 @@ public class EarthquakeDisplayController {
             }
             List<QuakeEntry> filteredQuakesData = earthquakeDataProcessor.filterPossibleAllEarthquakeData(minMagnitudeValue, maxMagnitudeValue, minDepthValue, maxDepthValue,
                     location, maxDistanceValue, phrase, where);
+            differentSorters.sortAll();
             // if list is empty inform the user that no earthquake data is found
             if(filteredQuakesData.isEmpty()){
                 String errorMessage = "No Earthquake data found. Please consider putting valid value";
@@ -215,6 +227,7 @@ public class EarthquakeDisplayController {
                 throw new QuakeDataNotFoundException("Earthquake data within the specified magnitude range (" + distMax + " - "  + ") was not found. Please put value that is greater than 0");
             }
             List<QuakeEntry> nearEarthQuakesData = earthquakeDataProcessor.earthQuakesNearMe(distMaxValue, location);
+            Collections.sort(nearEarthQuakesData, new DistanceComparator(location));
             // if list is empty inform the user that no earthquake data is found
             if (nearEarthQuakesData.isEmpty()) {
                 String errorMessage = "No earthquake data found. Hint: Please consider providing valid values.";
@@ -247,6 +260,9 @@ public class EarthquakeDisplayController {
                 throw new QuakeDataNotFoundException(errorMessage);
             }
             List<QuakeEntry> earthQuakesDepthData = earthquakeDataProcessor.quakesOfDepth(minDepthValue, maxDepthValue);
+
+            //sorting the quake data by depth
+            Collections.sort(earthQuakesDepthData, new DepthComparator());
             // if list is empty inform the user that no earthquake data is found
             if (earthQuakesDepthData.isEmpty()) {
                 String errorMessage = "No earthquake data found for depth range: " + minDepth + "," + maxDepth + " Please consider providing valid values.";
@@ -295,6 +311,14 @@ public class EarthquakeDisplayController {
                 throw new QuakeDataNotFoundException(errorMessage);
             }
             List<QuakeEntry> nearEarthQuakesData = earthquakeDataProcessor.findClosestEarthQuakes(location, howMany);
+            // Sort by distance
+            Location where = new Location(latitudeValue, latitudeValue);
+            Collections.sort(nearEarthQuakesData, new DistanceComparator(where));
+            differentSorters.sortAll();
+            System.out.println("Sorted by distance:");
+            for (QuakeEntry qe : nearEarthQuakesData) {
+                System.out.println(qe);
+            }
             // if list is empty inform the user that no earthquake data is found
             if(nearEarthQuakesData.isEmpty()){
                 String errorMessage = "No earthquake data found. Hint: Please consider providing valid values.";
@@ -323,6 +347,7 @@ public class EarthquakeDisplayController {
                         .body(new QuakeDataErrorResponse("Parameter 'howMany' must be a positive integer."));
             }
             List<QuakeEntry> largestEarthQuakesData = earthquakeDataProcessor.findLargestEarthQuakes(howMany);
+            differentSorters.sortAll();
             // if list is empty inform the user that no earthquake data is found
             if (largestEarthQuakesData.isEmpty()) {
                 String errorMessage = "No earthquake data found";
@@ -355,6 +380,7 @@ public class EarthquakeDisplayController {
         System.out.println("where is: " + where);
         try {
             List<QuakeEntry> earthQuakesByPhraseData = earthquakeDataProcessor.findEarthQuakesByPhrase(phrase, where);
+            Collections.sort(earthQuakesByPhraseData, new TitleComparator());
 
             // if list is empty inform the user that no earthquake data is found
             if (earthQuakesByPhraseData.isEmpty()) {
