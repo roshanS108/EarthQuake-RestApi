@@ -9,7 +9,7 @@ public class EarthquakeDataService {
     @Scheduled(fixedRate = 100000) //runs every 100 seconds
     public void fetchEarthQuakeData(){
 
-        //logic and implementation for fetching and parsing the atom feed.
+
 
 
     }
