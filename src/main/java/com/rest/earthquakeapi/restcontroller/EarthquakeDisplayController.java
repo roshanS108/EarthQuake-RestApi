@@ -99,9 +99,6 @@ public class EarthquakeDisplayController {
             //sort the Magnitude and Depth
             Collections.sort(filteredQuakesData, new MagnitudeComparator());
             Collections.sort(filteredQuakesData, new DepthComparator());
-
-
-
             // if list is empty inform the user that no earthquake data is found
             if(filteredQuakesData.isEmpty()){
                 String errorMessage = "No Earthquake data found. Please consider putting valid value";
